@@ -49,7 +49,7 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
     } catch (e) {
         return new Response(
             // @ts-ignore
-            JSON.stringify({ success: false, error: "Payment failed - " + e.message + body }),
+            JSON.stringify({ success: false, error: "Payment failed - " + e.message }),
             { status: 500 }
         );
     }
