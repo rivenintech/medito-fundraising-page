@@ -14,8 +14,8 @@
             ></path>
         </svg>
     </button>
-    <form action="/stripe-checkout" method="POST">
-        <!-- <p class="my-2">1. Donation period:</p>
+    <!-- <form action="/stripe-checkout" method="POST"> -->
+    <!-- <p class="my-2">1. Donation period:</p>
         <div class="flex gap-2">
             <input type="radio" id="one-time" name="interval" value="one-time" class="hidden" />
             <label
@@ -82,8 +82,8 @@
                 <span class="text-lightGray text-sm">USD</span>
             </div>
         </div> -->
-        <button type="submit">Submit</button>
-    </form>
+    <button id="testBtn">Submit</button>
+    <!-- </form> -->
 </dialog>
 
 <script>
@@ -101,14 +101,35 @@
         dialog.close();
     });
 
-    window.onload = function () {
-        var radios = document.getElementsByName("donation");
-        var inputDiv = document.getElementById("donationAmountDiv");
+    // window.onload = function () {
+    //     var radios = document.getElementsByName("donation");
+    //     var inputDiv = document.getElementById("donationAmountDiv");
 
-        for (var i = 0; i < radios.length; i++) {
-            radios[i].addEventListener("change", function () {
-                inputDiv.style.display = this.value === "custom" ? "block" : "none";
+    //     for (var i = 0; i < radios.length; i++) {
+    //         radios[i].addEventListener("change", function () {
+    //             inputDiv.style.display = this.value === "custom" ? "block" : "none";
+    //         });
+    //     }
+    // };
+
+    document.querySelector("#testBtn").addEventListener("click", () => {
+        pay();
+    });
+    function pay() {
+        fetch("/pay", { method: "POST", body: JSON.stringify("10") })
+            .then((res) => res.json())
+            .then((res) => {
+                if (!res.success) {
+                    console.error(res.error);
+                    return;
+                }
+
+                // Redirect to Stripe's payment page
+                // @ts-ignore
+                window.location = res.data.redirect_url;
+            })
+            .catch((e) => {
+                console.error(e);
             });
-        }
-    };
+    }
 </script>
