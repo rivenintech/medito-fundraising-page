@@ -18,7 +18,6 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
         const body = await request.json<Body>();
 
         const stripe = new Stripe(env.STRIPE_API_KEY, {
-            apiVersion: '2022-11-15',
             httpClient: Stripe.createFetchHttpClient()
         });
 
@@ -50,7 +49,7 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
     } catch (e) {
         return new Response(
             // @ts-ignore
-            JSON.stringify({ success: false, error: "Payment failed - " + e.message }),
+            JSON.stringify({ success: false, error: "Payment failed - " + e.message + body }),
             { status: 500 }
         );
     }
