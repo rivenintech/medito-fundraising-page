@@ -16,7 +16,6 @@ interface Body {
 export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
     try {
         const body = await request.json<Body>();
-        console.log(body.price);
 
         const stripe = new Stripe(env.STRIPE_API_KEY, {
             apiVersion: '2022-11-15',
@@ -37,7 +36,7 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
                         product_data: {
                             name: 'Blob Sticker',
                         },
-                        unit_amount: 10 * 100,
+                        unit_amount: body.price * 100,
                     },
                     quantity: 1,
                 },
