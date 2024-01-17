@@ -1,3 +1,10 @@
+<style>
+    input[type="radio"]:checked + label {
+        background-color: orange;
+        color: white;
+    }
+</style>
+
 <dialog class="p-6 w-1/2 h-1/2">
     <button autofocus>
         <svg width="20" height="20" fill="currentColor" class="bi bi-x-circle" viewBox="0 0 16 16">
@@ -10,21 +17,55 @@
     <form action="/stripe-checkout" method="POST">
         <p class="my-2">1. Donation period:</p>
         <div class="flex gap-2">
-            <button class="flex-1 text-center px-6 py-3 border-2 border-orange rounded hover:bg-orange hover:text-white duration-300">One time</button>
-            <button class="flex-1 text-center px-6 py-3 border-2 border-orange rounded hover:bg-orange hover:text-white duration-300">Monthly</button>
-            <button class="flex-1 text-center px-6 py-3 border-2 border-orange rounded hover:bg-orange hover:text-white duration-300">Yearly</button>
+            <input type="radio" id="one-time" name="interval" value="one-time" class="hidden" />
+            <label
+                for="one-time"
+                class="flex-1 text-center px-6 py-3 border-2 border-orange rounded hover:bg-orange hover:text-white duration-300 cursor-pointer">One time</label
+            >
+
+            <input type="radio" id="monthly" name="interval" value="monthly" class="hidden" />
+            <label
+                for="monthly"
+                class="flex-1 text-center px-6 py-3 border-2 border-orange rounded hover:bg-orange hover:text-white duration-300 cursor-pointer">Monthly</label
+            >
+
+            <input type="radio" id="yearly" name="interval" value="yearly" class="hidden" />
+            <label for="yearly" class="flex-1 text-center px-6 py-3 border-2 border-orange rounded hover:bg-orange hover:text-white duration-300 cursor-pointer"
+                >Yearly</label
+            >
         </div>
         <div>
             <p class="my-2">2. Donation amount:</p>
             <div class="flex gap-2">
-                <button class="flex-1 text-center px-6 py-3 border-2 border-orange rounded hover:bg-orange hover:text-white duration-300"> 5$</button>
-                <button class="flex-1 text-center px-6 py-3 border-2 border-orange rounded hover:bg-orange hover:text-white duration-300"> 10$</button>
-                <button class="flex-1 text-center px-6 py-3 border-2 border-orange rounded hover:bg-orange hover:text-white duration-300"> 25$</button>
-                <button class="flex-1 text-center px-6 py-3 border-2 border-orange rounded hover:bg-orange hover:text-white duration-300"> 50$</button>
-                <button class="flex-1 text-center px-6 py-3 border-2 border-orange rounded hover:bg-orange hover:text-white duration-300"> Custom</button>
+                <input type="radio" id="5" name="donation" value="5" class="hidden" />
+                <label for="5" class="flex-1 text-center px-6 py-3 border-2 border-orange rounded hover:bg-orange hover:text-white duration-300 cursor-pointer"
+                    >5$</label
+                >
+
+                <input type="radio" id="10" name="donation" value="10" class="hidden" />
+                <label for="10" class="flex-1 text-center px-6 py-3 border-2 border-orange rounded hover:bg-orange hover:text-white duration-300 cursor-pointer"
+                    >10$</label
+                >
+
+                <input type="radio" id="25" name="donation" value="25" class="hidden" />
+                <label for="25" class="flex-1 text-center px-6 py-3 border-2 border-orange rounded hover:bg-orange hover:text-white duration-300 cursor-pointer"
+                    >25$</label
+                >
+
+                <input type="radio" id="50" name="donation" value="50" class="hidden" />
+                <label for="50" class="flex-1 text-center px-6 py-3 border-2 border-orange rounded hover:bg-orange hover:text-white duration-300 cursor-pointer"
+                    >50$</label
+                >
+
+                <input type="radio" id="custom" name="donation" value="custom" class="hidden" />
+                <label
+                    for="custom"
+                    class="flex-1 text-center px-6 py-3 border-2 border-orange rounded hover:bg-orange hover:text-white duration-300 cursor-pointer"
+                    >Custom</label
+                >
             </div>
         </div>
-        <div class="relative rounded-md shadow-sm mt-2">
+        <div id="donationAmountDiv" class="relative rounded-md shadow-sm mt-2" style="display: none;">
             <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
                 <span class="text-lightGray text-sm">$</span>
             </div>
@@ -35,6 +76,7 @@
                 min="0.5"
                 class="w-full rounded-md py-1.5 pl-7 pr-12 text-black ring-1 ring-inset ring-[#858ebe] placeholder:text-lightGray outline-none focus:ring-orange text-sm leading-6"
                 placeholder="0,50"
+                name="amount"
             />
             <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
                 <span class="text-lightGray text-sm">USD</span>
@@ -58,4 +100,15 @@
     closeButton.addEventListener("click", () => {
         dialog.close();
     });
+
+    window.onload = function () {
+        var radios = document.getElementsByName("donation");
+        var inputDiv = document.getElementById("donationAmountDiv");
+
+        for (var i = 0; i < radios.length; i++) {
+            radios[i].addEventListener("change", function () {
+                inputDiv.style.display = this.value === "custom" ? "block" : "none";
+            });
+        }
+    };
 </script>
