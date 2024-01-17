@@ -170,7 +170,7 @@ const rewards = [
                             >
                             <div
                                 class="cf-turnstile"
-                                data-sitekey={import.meta.env.PROD ? "<CF_TURNSTILE_KEY>" : "1x00000000000000000000BB"}
+                                data-sitekey={import.meta.env.PROD ? "1x00000000000000000000BB" : "1x00000000000000000000BB"}
                                 data-theme="light"
                             >
                             </div>
@@ -309,18 +309,18 @@ const rewards = [
         const donationAmount = document.querySelector("#donationAmount");
 
         // Stripe donate button, change add __prefilled_amount to the url to prefill the amount when input stops
-        donationAmount.addEventListener("input", (e) => {
-            const amount = e.target.value;
-            if (amount >= 0.5) {
-                donationBtn.disabled = false;
-            } else {
-                donationBtn.disabled = true;
-            }
-        });
-        donationBtn.addEventListener("click", (e) => {
-            const amount = donationAmount.value;
-            window.open(`https://donate.stripe.com/test_bIY6phdS9dem2zK4gg?__prefilled_amount=${amount * 100}`, "_blank");
-        });
+        // donationAmount.addEventListener("input", (e) => {
+        //     const amount = e.target.value;
+        //     if (amount >= 0.5) {
+        //         donationBtn.disabled = false;
+        //     } else {
+        //         donationBtn.disabled = true;
+        //     }
+        // });
+        // donationBtn.addEventListener("click", (e) => {
+        //     const amount = donationAmount.value;
+        //     window.open(`https://donate.stripe.com/test_bIY6phdS9dem2zK4gg?__prefilled_amount=${amount * 100}`, "_blank");
+        // });
 
         // FAQ - close other details when one is opened
         const details = document.querySelectorAll("details");
