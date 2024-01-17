@@ -1,10 +1,8 @@
 const Stripe = require("stripe");
-
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
-
 const product = "prod_PO1AuTRpFRVaSM";
 
 export async function onRequest(context) {
+    const stripe = new Stripe(context.env.STRIPE_SECRET_KEY);
     if (context.request.method === "POST") {
         const formData = await context.request.formData();
         const body = Object.fromEntries(formData.entries());
