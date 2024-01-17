@@ -1,5 +1,5 @@
 const Stripe = require("stripe");
-const product = "prod_PO1AuTRpFRVaSM";
+const product = "prod_POUjle9E7LDBwk";
 
 export async function onRequest(context) {
     const stripe = new Stripe(context.env.STRIPE_SECRET_KEY);
