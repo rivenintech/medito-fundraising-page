@@ -1,0 +1,57 @@
+---
+const url = encodeURIComponent(Astro.url);
+let { title, twitter_handle = "" } = Astro.props;
+
+if (twitter_handle) {
+    twitter_handle = "%20by%20@" + twitter_handle;
+}
+---
+
+<div class="flex gap-2 items-center">
+    <a href={`https://www.facebook.com/sharer/sharer.php?u=${url}`} target="_blank" title="Share on Facebook" aria-label="Share on Facebook">
+        <svg width="32" height="32" viewBox="0 0 24 24">
+            <path
+                fill="#F6B17A"
+                d="M22 12c0-5.52-4.48-10-10-10S2 6.48 2 12c0 4.84 3.44 8.87 8 9.8V15H8v-3h2V9.5C10 7.57 11.57 6 13.5 6H16v3h-2c-.55 0-1 .45-1 1v2h3v3h-3v6.95c5.05-.5 9-4.76 9-9.95z"
+            ></path>
+        </svg>
+    </a>
+    <a
+        href={`https://twitter.com/intent/tweet?url=${url}&text=${title}${twitter_handle}`}
+        target="_blank"
+        title="Share on Twitter"
+        aria-label="Share on Twitter"
+    >
+        <svg width="24" height="24" viewBox="0 0 24 24">
+            <path
+                fill="#F6B17A"
+                d="M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584l-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932ZM17.61 20.644h2.039L6.486 3.24H4.298Z"
+            ></path>
+        </svg>
+    </a>
+    <a href={`https://reddit.com/submit?url=${url}&title=${title}`} target="_blank" title="Share on Reddit" aria-label="Share on Reddit">
+        <svg width="32" height="32" viewBox="0 0 24 24">
+            <path
+                fill="#F6B17A"
+                d="M10.75 13.04c0-.57-.47-1.04-1.04-1.04c-.57 0-1.04.47-1.04 1.04a1.04 1.04 0 1 0 2.08 0m3.34 2.37c-.45.45-1.41.61-2.09.61s-1.64-.16-2.09-.61a.26.26 0 0 0-.38 0a.26.26 0 0 0 0 .38c.71.71 2.07.77 2.47.77c.4 0 1.76-.06 2.47-.77a.26.26 0 0 0 0-.38c-.1-.1-.27-.1-.38 0m.2-3.41c-.57 0-1.04.47-1.04 1.04c0 .57.47 1.04 1.04 1.04s1.04-.47 1.04-1.04c0-.57-.46-1.04-1.04-1.04"
+            ></path>
+            <path
+                fill="#F6B17A"
+                d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10s10-4.48 10-10S17.52 2 12 2m5.8 11.33c.02.14.03.29.03.44c0 2.24-2.61 4.06-5.83 4.06s-5.83-1.82-5.83-4.06c0-.15.01-.3.03-.44c-.51-.23-.86-.74-.86-1.33a1.455 1.455 0 0 1 2.47-1.05c1.01-.73 2.41-1.19 3.96-1.24l.74-3.49c.01-.07.05-.13.11-.16c.06-.04.13-.05.2-.04l2.42.52a1.04 1.04 0 1 1 .93 1.5c-.56 0-1.01-.44-1.04-.99l-2.17-.46l-.66 3.12c1.53.05 2.9.52 3.9 1.24a1.455 1.455 0 1 1 1.6 2.38"
+            ></path>
+        </svg>
+    </a>
+    <button
+        type="button"
+        onclick="navigator.clipboard.writeText(window.location.href)"
+        title="Copy website to clipboard"
+        aria-label="Copy website to clipboard"
+    >
+        <svg width="30" height="30" viewBox="0 0 24 24">
+            <g fill="none" stroke="#F6B17A" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
+                <path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"></path>
+                <path d="M9 5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v0a2 2 0 0 1-2 2h-2a2 2 0 0 1-2-2"></path>
+            </g></svg
+        >
+    </button>
+</div>

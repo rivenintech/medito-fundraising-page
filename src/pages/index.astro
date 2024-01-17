@@ -1,0 +1,339 @@
+---
+import Layout from "../layouts/Layout.astro";
+import SocialBtns from "../components/socialBtns.astro";
+import DonateModal from "../components/donateModal.astro";
+const title = "Title Of Fundraising Action";
+
+const faq = [
+    {
+        question: "Why does 'Fund on completion' require GitHub login?",
+        answer: "For pledges due upon completion vs. paid upfront, we want to offer the maintainer more visibility into who made the pledge for their assessment.",
+    },
+    {
+        question: "What happens if the maintainer doesn't complete the work?",
+        answer: "If the maintainer doesn't complete the work, the funds will be returned to the backers.",
+    },
+    {
+        question: "How are funds returned to backers?",
+        answer: "If the maintainer doesn't complete the work, the funds will be returned to the backers.",
+    },
+];
+
+const rewards = [
+    { title: "Tier 1: Beginner Bliss ✨", amount: "$5" },
+    { title: "Tier 2: Zen Master 🧘‍♂️", amount: "$10" },
+    { title: "Tier 3: Mindful Explorer 🌍", amount: "$25" },
+    { title: "Tier 4: Enlightened Guru 🙏", amount: "$50+" },
+    ,
+];
+---
+
+<Layout title={title}>
+    <style>
+        .basicContainer {
+            @apply container mx-auto max-w-7xl px-3;
+        }
+    </style>
+
+    <div class="md:h-screen" style="background-image: url('/new_file.svg');">
+        <section class="basicContainer grid grid-cols-1 gap-12 lg:grid-cols-2 lg:pt-52">
+            <div class="mt-6">
+                <h1 class="text-4xl font-bold w-fit bg-white text-center">{title}</h1>
+                <p class="mt-6 sm:block bg-white w-fit">
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam voluptatum, quibusdam, quia, quos voluptates voluptatem exercitationem
+                    quod doloribus quas voluptatibus quibusdam, quia, quos voluptates voluptatem exercitationem quod doloribus quas voluptatibus.
+                </p>
+            </div>
+            <div class="flex flex-col rounded-lg shadow-2xl p-6 gap-4 bg-[#424769] text-white">
+                <div class="flex flex-col gap-2">
+                    <p class="text-lightGray">
+                        <span class="text-2xl text-orange" id="raised">$142,952</span> raised of <span id="goal">$155,000</span> goal
+                    </p>
+                    <div class="flex w-full h-4 overflow-hidden text-xs font-medium rounded-full flex-start bg-progressBar">
+                        <div
+                            id="progressBar"
+                            class="flex items-center justify-center h-full overflow-hidden bg-orange rounded-full transition-all duration-[2s]"
+                            style="width: 0%"
+                        >
+                            0% Completed
+                        </div>
+                    </div>
+                    <p id="donatorsCount" class="text-lightGray">0 donations</p>
+                </div>
+
+                <DonateModal />
+
+                <button
+                    class="text-center px-6 py-3 border-2 border-orange disabled:border-[#c79a75] rounded hover:enabled:bg-orange duration-300"
+                    id="donateBtn"
+                >
+                    Donate 💛
+                </button>
+                <div class="flex items-center justify-end mt-2">
+                    <p class="pr-3">Share:</p>
+                    <SocialBtns title={title} />
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <div class="relative">
+        <svg class="absolute bottom-0 text-[#424769]" viewBox="0 0 1400 50" fill="currentColor">
+            <path d="M0 0c309.151 33.333 542 49 700 50 158-1 390.849-16.667 700-50v50H0V0z"></path>
+        </svg>
+    </div>
+
+    <section class="bg-[#424769] text-white py-24">
+        <div class="container mx-auto">
+            <div class="flex flex-col gap-2 text-center mb-6">
+                <h2 class="text-4xl font-semibold">FAQ</h2>
+                <p class="text-lightGray font-medium">Frequenty asked questions</p>
+            </div>
+            <!-- Loop in JS -->
+            {
+                faq.map((faq) => (
+                    <details class="border-b group">
+                        <summary class="flex select-none">
+                            <h3 class="flex flex-1 items-center justify-between py-4 font-medium hover:underline">
+                                {faq.question}
+                                <svg
+                                    width="20"
+                                    height="20"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    stroke-width="2"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    class="transition-transform duration-300 group-open:rotate-[180deg]"
+                                >
+                                    <path d="m6 9 6 6 6-6" />
+                                </svg>
+                            </h3>
+                        </summary>
+                        <div class="text-sm pb-4">{faq.answer}</div>
+                    </details>
+                ))
+            }
+            <details class="border-b group">
+                <summary class="flex select-none">
+                    <h3 class="flex flex-1 items-center justify-between py-4 font-medium hover:underline">
+                        I have other questions. How can I get in touch?
+                        <svg
+                            width="20"
+                            height="20"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            class="transition-transform duration-300 group-open:rotate-[180deg]"
+                        >
+                            <path d="m6 9 6 6 6-6"></path>
+                        </svg>
+                    </h3>
+                </summary>
+                <div class="text-sm pb-4">
+                    <form class="flex flex-col gap-5 rounded mb-6" id="contact">
+                        <div>
+                            <p class="uppercase font-medium text-lightGray">Get in touch</p>
+                            <h2 class="text-4xl font-bold">Contact Us.</h2>
+                        </div>
+                        <div class="flex flex-col">
+                            <label for="email" class="mb-2 font-medium">Your Email</label>
+                            <input
+                                name="email"
+                                id="email"
+                                type="email"
+                                placeholder="you@example.com"
+                                class="p-3 rounded focus:outline-none placeholder-shown:border-none invalid:border invalid:border-red-500 text-black"
+                                required
+                            />
+                        </div>
+                        <div class="flex flex-col">
+                            <label for="message" class="mb-2 font-medium">Your Message</label>
+                            <textarea
+                                name="message"
+                                id="message"
+                                rows="3"
+                                placeholder="Type your question here... 😁"
+                                class="p-3 rounded focus:outline-none text-black"
+                                required></textarea>
+                        </div>
+
+                        <div class="flex justify-between">
+                            <button
+                                type="submit"
+                                class="text-center px-6 py-3 my-auto border-2 border-orange disabled:border-[#c79a75] rounded hover:enabled:bg-orange duration-300"
+                                >Send</button
+                            >
+                            <div
+                                class="cf-turnstile"
+                                data-sitekey={import.meta.env.PROD ? "<CF_TURNSTILE_KEY>" : "1x00000000000000000000BB"}
+                                data-theme="light"
+                            >
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </details>
+        </div>
+    </section>
+
+    <div class="relative">
+        <!-- <svg class="absolute bottom-0" viewBox="0 0 1400 74" fill="white"
+            ><path
+                d="M0 24C87.243 11.422 173.12 5.133 257.633 5.133 468.305 5.133 578 73 700 74c136-1 290.882-96.208 481.234-68.867C1268.807 17.71 1341.73 24 1400 24v55H0V24z"
+            ></path></svg
+        > -->
+
+        <svg
+            width="100%"
+            height="100%"
+            id="svg"
+            viewBox="0 0 1440 195"
+            xmlns="http://www.w3.org/2000/svg"
+            class="transition duration-300 ease-in-out delay-150"
+        >
+            <style>
+                .path-0 {
+                    animation: pathAnim-0 10s;
+                    animation-timing-function: linear;
+                    animation-iteration-count: infinite;
+                }
+                @keyframes pathAnim-0 {
+                    0% {
+                        d: path(
+                            "M 0,200 L 0,100 C 54.95156303675715,83.06286499484713 109.9031260735143,66.12572998969426 180,72.5 C 250.0968739264857,78.87427001030574 335.33905874270005,108.55994503607007 411,105 C 486.66094125729995,101.44005496392993 552.7406389556853,64.63448986602541 611,68 C 669.2593610443147,71.36551013397459 719.6983854345586,114.90209549982825 796,121 C 872.3016145654414,127.09790450017175 974.4658193060802,95.75712813466162 1058,79 C 1141.5341806939198,62.24287186533838 1206.43833734112,60.06939196152525 1267,66 C 1327.56166265888,71.93060803847476 1383.78083132944,85.96530401923738 1440,100 L 1440,200 L 0,200 Z"
+                        );
+                    }
+                    25% {
+                        d: path(
+                            "M 0,200 L 0,100 C 56.80796976983855,120.86087255238749 113.6159395396771,141.72174510477498 176,131 C 238.3840604603229,120.27825489599948 306.34421161113016,77.97389213328753 391,75 C 475.65578838886984,72.02610786671247 577.0072140158022,108.38268636207489 642,109 C 706.9927859841978,109.61731363792511 735.6269323256612,76.49536241841292 806,74 C 876.3730676743388,71.50463758158708 988.4850566815528,102.63586396427344 1057,114 C 1125.5149433184472,125.36413603572656 1150.432840948128,117.9611817244933 1207,112 C 1263.567159051872,106.03881827550669 1351.7835795259361,103.51940901923738 1440,100 L 1440,200 L 0,200 Z"
+                        );
+                    }
+                    50% {
+                        d: path(
+                            "M 0,200 L 0,100 C 49.11920302301614,99.6946066643765 98.23840604603228,99.389213328753 170,108 C 241.76159395396772,116.61078667124699 336.165578838887,134.137573342494 406,128 C 475.834421161113,121.862426657506 521.0992785984198,92.05977327378907 585,80 C 648.9007214015802,67.94022672621093 731.4373067674339,75.62315355547921 801,87 C 870.5626932325661,98.37684644452079 927.1514943318448,114.44761250429407 1005,121 C 1082.8485056681552,127.55238749570593 1181.9567159051871,127.79339642734455 1258,118 C 1334.0432840948129,108.20660357265546 1387.0216420474064,103.96530401923738 1440,100 L 1440,200 L 0,200 Z"
+                        );
+                    }
+                    75% {
+                        d: path(
+                            "M 0,200 L 0,100 C 66.73789075918927,113.78113500505285 133.47578151837854,127.5622700101057 196,120 C 258.52421848162146,112.4377299898943 316.83476468567505,83.52989992785985 381,86 C 445.16523531432495,88.47010007214015 515.1851597389214,124.31748973205082 594,126 C 672.8148402610786,127.68251026794918 760.4245963586394,98.0100959996565 842,91 C 923.5754036413606,83.9899040003435 999.1164548265203,97.75712813466162 1061,114 C 1122.8835451734797,130.24287186533838 1171.1095843352798,163.50574373067675 1232,172 C 1292.8904156647202,180.49425626932325 1366.4452078323602,166.21939196152525 1440,152 L 1440,200 L 0,200 Z"
+                        );
+                    }
+                    100% {
+                        d: path(
+                            "M 0,200 L 0,100 C 54.95156303675715,83.06286499484713 109.9031260735143,66.12572998969426 180,72.5 C 250.0968739264857,78.87427001030574 335.33905874270005,108.55994503607007 411,105 C 486.66094125729995,101.44005496392993 552.7406389556853,64.63448986602541 611,68 C 669.2593610443147,71.36551013397459 719.6983854345586,114.90209549982825 796,121 C 872.3016145654414,127.09790450017175 974.4658193060802,95.75712813466162 1058,79 C 1141.5341806939198,62.24287186533838 1206.43833734112,60.06939196152525 1267,66 C 1327.56166265888,71.93060803847476 1383.78083132944,85.96530401923738 1440,100 L 1440,200 L 0,200 Z"
+                        );
+                    }
+                }
+            </style>
+            <path
+                d="M 0,200 L 0,100 C 54.95156303675715,83.06286499484713 109.9031260735143,66.12572998969426 180,72.5 C 250.0968739264857,78.87427001030574 335.33905874270005,108.55994503607007 411,105 C 486.66094125729995,101.44005496392993 552.7406389556853,64.63448986602541 611,68 C 669.2593610443147,71.36551013397459 719.6983854345586,114.90209549982825 796,121 C 872.3016145654414,127.09790450017175 974.4658193060802,95.75712813466162 1058,79 C 1141.5341806939198,62.24287186533838 1206.43833734112,60.06939196152525 1267,66 C 1327.56166265888,71.93060803847476 1383.78083132944,85.96530401923738 1440,100 L 1440,200 L 0,200 Z"
+                stroke="none"
+                stroke-width="0"
+                fill="#424769"
+                fill-opacity="1"
+                class="transition-all duration-300 ease-in-out delay-150 path-0"
+                transform="rotate(-180 720 100)"></path>
+        </svg>
+
+        <section>
+            <div class="container mx-auto">
+                <h2 class="text-3xl font-semibold">Rewards</h2>
+                <!-- 4 cards of rewards with tiers, based on the amount someone donated -->
+                <div class="grid grid-cols-1 gap-12 mt-6 lg:grid-cols-4">
+                    {
+                        rewards.map((reward) => (
+                            <div class="flex flex-col gap-5 rounded-lg shadow shadow-[#7077A1] hover:scale-105 cursor-pointer duration-300 p-6 bg-white group">
+                                <h3 class="font-medium text-lightGray text-center">{reward.title}</h3>
+                                <p class="text-center font-semibold text-xl">{reward.amount}</p>
+                                <ul class="list-disc list-inside self-center">
+                                    <li>Discord Donor rank - access to a private channel and special emotes.</li>
+                                    <li>Some other reward</li>
+                                    <li>Some other reward</li>
+                                </ul>
+                                <button class="text-center px-6 py-3 border-2 border-orange rounded group-hover:bg-orange duration-300 group-hover:text-white">
+                                    Donate
+                                </button>
+                            </div>
+                        ))
+                    }
+                </div>
+            </div>
+        </section>
+
+        <!-- REMOVE IT LATER -->
+        <div class="h-96"></div>
+    </div>
+
+    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+
+    <script>
+        const totalDuration = 2000; // Total duration in milliseconds
+        const raisedAmount = 80200;
+        const goalAmount = 155000;
+        const donators = 3300;
+        const progress = Math.round((raisedAmount / goalAmount) * 100);
+
+        // Progress bar
+        const progressBar = document.getElementById("progressBar");
+        progressBar.style.width = `${Math.min(progress, 100)}%`;
+
+        let currentProgress = 0;
+        const stepDuration = totalDuration / progress; // Duration of each step
+
+        const interval = setInterval(() => {
+            if (currentProgress >= progress) {
+                clearInterval(interval);
+            } else {
+                currentProgress += 1;
+                progressBar.innerHTML = `${currentProgress}%`;
+            }
+        }, stepDuration);
+        progressBar.innerHTML = `${progress}%`;
+
+        // Donators count
+        const donatorsCount = document.getElementById("donatorsCount");
+        donatorsCount.innerHTML = `${donators.toLocaleString("en-US")} donations`;
+
+        // Raised and goal amount
+        const raised = document.getElementById("raised");
+        const goal = document.getElementById("goal");
+        raised.innerHTML = `$${raisedAmount.toLocaleString("en-US")}`;
+        goal.innerHTML = `$${goalAmount.toLocaleString("en-US")}`;
+
+        const donationBtn = document.querySelector("#donationBtn");
+        const donationAmount = document.querySelector("#donationAmount");
+
+        // Stripe donate button, change add __prefilled_amount to the url to prefill the amount when input stops
+        donationAmount.addEventListener("input", (e) => {
+            const amount = e.target.value;
+            if (amount >= 0.5) {
+                donationBtn.disabled = false;
+            } else {
+                donationBtn.disabled = true;
+            }
+        });
+        donationBtn.addEventListener("click", (e) => {
+            const amount = donationAmount.value;
+            window.open(`https://donate.stripe.com/test_bIY6phdS9dem2zK4gg?__prefilled_amount=${amount * 100}`, "_blank");
+        });
+
+        // FAQ - close other details when one is opened
+        const details = document.querySelectorAll("details");
+        details.forEach((detail) => {
+            detail.addEventListener("toggle", (e) => {
+                if (e.target.open) {
+                    details.forEach((d) => {
+                        if (d !== e.target) {
+                            d.removeAttribute("open");
+                        }
+                    });
+                }
+            });
+        });
+    </script>
+</Layout>
