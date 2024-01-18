@@ -34,6 +34,10 @@ export default function DonationModal() {
             setCurrencyError('Please select a currency.');
         }
 
+        if (intervalError || amountError || currencyError) {
+            return;
+        }
+
         fetch("/stripe-checkout", {
             method: "POST",
             headers: {
