@@ -2,15 +2,13 @@ import Stripe from "stripe";
 
 interface Env {
     STRIPE_API_KEY: string;
+    PRODUCT_ID: string;
 }
 
 interface Body {
-    price: number;
-    cardNumber: string;
-    expiry: string;
-    cvc: number;
-    country: string;
-    zipcode: string;
+    amount: number;
+    currency: string;
+    interval: string;
 }
 
 export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
@@ -22,25 +20,28 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
         });
 
         const successUrl = new URL(request.url);
-        successUrl.pathname = '/payment_successful';
+        successUrl.pathname = '/success';
         const cancelUrl = new URL(request.url);
         cancelUrl.pathname = '/';
 
         const session = await stripe.checkout.sessions.create({
-            payment_method_types: ['card'],
+            mode: body.interval === 'subscription' ? 'subscription' : 'payment',
             line_items: [
                 {
                     price_data: {
-                        currency: 'usd',
-                        product_data: {
-                            name: 'Blob Sticker',
-                        },
-                        unit_amount: body.price * 100,
+                        currency: body.currency.toLowerCase(),
+                        recurring:
+                            body.interval !== 'subscription'
+                                ? undefined
+                                : {
+                                    interval: body.interval,
+                                },
+                        unit_amount: body.amount * 100,
+                        product: env.PRODUCT_ID,
                     },
                     quantity: 1,
                 },
             ],
-            mode: 'payment',
             success_url: successUrl.toString(),
             cancel_url: cancelUrl.toString(),
         });
