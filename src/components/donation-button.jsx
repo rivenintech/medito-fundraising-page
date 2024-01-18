@@ -18,21 +18,32 @@ export default function DonationModal() {
     const handleSubmit = (event) => {
         event.preventDefault();
 
+        event.preventDefault();
+
         // Form validation
-        const interval = document.querySelector('input[name="interval"]:checked').value;
+        const interval = document.querySelector('input[name="interval"]:checked')?.value;
         const amount = document.querySelector('input[name="amount"]').value;
         const currency = document.querySelector('input[name="currency"]').value;
 
-        // If validation fails, set the error message in the state
+        let intervalError = '';
+        let amountError = '';
+        let currencyError = '';
+
+        // If validation fails, set the error message in the local variable
         if (!interval) {
-            setIntervalError('Please select a donation period.');
+            intervalError = 'Please select a donation period.';
         }
         if (!amount) {
-            setAmountError('Please enter a donation amount.');
+            amountError = 'Please enter a donation amount.';
         }
         if (!currency) {
-            setCurrencyError('Please select a currency.');
+            currencyError = 'Please select a currency.';
         }
+
+        // Set the state for all error messages
+        setIntervalError(intervalError);
+        setAmountError(amountError);
+        setCurrencyError(currencyError);
 
         if (intervalError || amountError || currencyError) {
             return;
