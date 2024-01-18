@@ -72,7 +72,7 @@ import Notification from "@/components/notification";
 
                 <div class="flex items-center justify-end mt-2">
                     <p class="pr-3">Share:</p>
-                    <SocialBtns title={title} />
+                    <SocialBtns title={title} url={encodeURIComponent(Astro.url)} />
                 </div>
             </div>
         </section>
