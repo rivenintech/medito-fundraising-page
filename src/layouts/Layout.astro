@@ -1,7 +1,8 @@
 ---
 const { title } = Astro.props;
+import Footer from "@/components/footer.astro";
+import "@/styles/globals.css";
 import "@fontsource/poppins";
-import Header from "../components/header.astro";
 ---
 
 <!doctype html>
@@ -14,9 +15,7 @@ import Header from "../components/header.astro";
         <title>{title}</title>
     </head>
     <body class="text-black">
-        <!-- <Header /> -->
-        <!-- <main class="pt-24"> -->
-        <main class="">
+        <main>
             <slot />
         </main>
         <!-- <Footer /> -->

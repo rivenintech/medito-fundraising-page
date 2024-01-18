@@ -1,10 +1,16 @@
+import tailwind from "@astrojs/tailwind";
 import { defineConfig } from "astro/config";
 
-import tailwind from "@astrojs/tailwind";
+import react from "@astrojs/react";
 
 // https://astro.build/config
 export default defineConfig({
-    integrations: [tailwind()],
+    integrations: [
+        tailwind({
+            applyBaseStyles: false,
+        }),
+        react(),
+    ],
     build: {
         // Example: Generate `page.html` instead of `page/index.html` during build.
         // Used to remove trailing slash on Cloudflare (https://developers.cloudflare.com/pages/platform/serving-pages/#route-matching)

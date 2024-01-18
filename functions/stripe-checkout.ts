@@ -1,3 +1,10 @@
+/**
+ * Handles the POST request for the Stripe checkout.
+ * 
+ * @param request - The incoming request object.
+ * @param env - The environment variables.
+ * @returns A response object indicating the success or failure of the payment.
+ */
 import Stripe from "stripe";
 
 interface Env {
@@ -22,8 +29,6 @@ function formatAmount(currency, amount) {
     const isZeroDecimal = zeroDecimalCurrencies.includes(currency.toLowerCase());
     const isThreeDecimal = threeDecimalCurrencies.includes(currency.toLowerCase());
 
-    let formattedAmount;
-
     if (isZeroDecimal) {
         return parseInt(amount.toFixed(0));
     } else if (isThreeDecimal) {
@@ -35,6 +40,7 @@ function formatAmount(currency, amount) {
     }
 }
 
+// Handles requests to the /stripe-checkout endpoint and returns a redirect URL to the Stripe checkout
 export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
     try {
         const body = await request.json<Body>();
