@@ -1,7 +1,158 @@
+---
+const currencies = [
+    "AED",
+    "AFN",
+    "ALL",
+    "AMD",
+    "ANG",
+    "AOA",
+    "ARS",
+    "AUD",
+    "AWG",
+    "AZN",
+    "BAM",
+    "BBD",
+    "BDT",
+    "BGN",
+    "BIF",
+    "BMD",
+    "BND",
+    "BOB",
+    "BRL",
+    "BSD",
+    "BWP",
+    "BZD",
+    "CAD",
+    "CDF",
+    "CHF",
+    "CLP",
+    "CNY",
+    "COP",
+    "CRC",
+    "CVE",
+    "CZK",
+    "DJF",
+    "DKK",
+    "DOP",
+    "DZD",
+    "EGP",
+    "ETB",
+    "EUR",
+    "FJD",
+    "FKP",
+    "GBP",
+    "GEL",
+    "GHS",
+    "GIP",
+    "GMD",
+    "GNF",
+    "GTQ",
+    "GYD",
+    "HKD",
+    "HNL",
+    "HRK",
+    "HTG",
+    "HUF",
+    "IDR",
+    "ILS",
+    "INR",
+    "ISK",
+    "JMD",
+    "JPY",
+    "KES",
+    "KGS",
+    "KHR",
+    "KMF",
+    "KRW",
+    "KYD",
+    "KZT",
+    "LAK",
+    "LBP",
+    "LKR",
+    "LRD",
+    "LSL",
+    "MAD",
+    "MDL",
+    "MGA",
+    "MKD",
+    "MMK",
+    "MNT",
+    "MOP",
+    "MRO",
+    "MUR",
+    "MVR",
+    "MWK",
+    "MXN",
+    "MYR",
+    "MZN",
+    "NAD",
+    "NGN",
+    "NIO",
+    "NOK",
+    "NPR",
+    "NZD",
+    "PAB",
+    "PEN",
+    "PGK",
+    "PHP",
+    "PKR",
+    "PLN",
+    "PYG",
+    "QAR",
+    "RON",
+    "RSD",
+    "RUB",
+    "RWF",
+    "SAR",
+    "SBD",
+    "SCR",
+    "SEK",
+    "SGD",
+    "SHP",
+    "SLL",
+    "SOS",
+    "SRD",
+    "STD",
+    "SVC",
+    "SZL",
+    "THB",
+    "TJS",
+    "TOP",
+    "TRY",
+    "TTD",
+    "TWD",
+    "TZS",
+    "UAH",
+    "UGX",
+    "USD",
+    "UYU",
+    "UZS",
+    "VND",
+    "VUV",
+    "WST",
+    "XAF",
+    "XCD",
+    "XOF",
+    "XPF",
+    "YER",
+    "ZAR",
+    "ZMW",
+];
+---
+
 <style>
     input[type="radio"]:checked + label {
-        background-color: orange;
-        color: white;
+        @apply bg-orange text-white;
+    }
+
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+
+    input[type="number"] {
+        -moz-appearance: textfield;
     }
 </style>
 
@@ -14,76 +165,57 @@
             ></path>
         </svg>
     </button>
-    <!-- <form action="/stripe-checkout" method="POST"> -->
-    <!-- <p class="my-2">1. Donation period:</p>
+    <form id="donationModal">
+        <p class="my-2">1. Donation period:</p>
         <div class="flex gap-2">
-            <input type="radio" id="one-time" name="interval" value="one-time" class="hidden" />
+            <input type="radio" id="one-time" name="interval" value="payment" class="hidden" />
             <label
                 for="one-time"
                 class="flex-1 text-center px-6 py-3 border-2 border-orange rounded hover:bg-orange hover:text-white duration-300 cursor-pointer">One time</label
             >
 
-            <input type="radio" id="monthly" name="interval" value="monthly" class="hidden" />
+            <input type="radio" id="monthly" name="interval" value="month" class="hidden" />
             <label
                 for="monthly"
                 class="flex-1 text-center px-6 py-3 border-2 border-orange rounded hover:bg-orange hover:text-white duration-300 cursor-pointer">Monthly</label
             >
 
-            <input type="radio" id="yearly" name="interval" value="yearly" class="hidden" />
+            <input type="radio" id="yearly" name="interval" value="year" class="hidden" />
             <label for="yearly" class="flex-1 text-center px-6 py-3 border-2 border-orange rounded hover:bg-orange hover:text-white duration-300 cursor-pointer"
                 >Yearly</label
             >
         </div>
-        <div>
-            <p class="my-2">2. Donation amount:</p>
-            <div class="flex gap-2">
-                <input type="radio" id="5" name="donation" value="5" class="hidden" />
-                <label for="5" class="flex-1 text-center px-6 py-3 border-2 border-orange rounded hover:bg-orange hover:text-white duration-300 cursor-pointer"
-                    >5$</label
-                >
 
-                <input type="radio" id="10" name="donation" value="10" class="hidden" />
-                <label for="10" class="flex-1 text-center px-6 py-3 border-2 border-orange rounded hover:bg-orange hover:text-white duration-300 cursor-pointer"
-                    >10$</label
-                >
-
-                <input type="radio" id="25" name="donation" value="25" class="hidden" />
-                <label for="25" class="flex-1 text-center px-6 py-3 border-2 border-orange rounded hover:bg-orange hover:text-white duration-300 cursor-pointer"
-                    >25$</label
-                >
-
-                <input type="radio" id="50" name="donation" value="50" class="hidden" />
-                <label for="50" class="flex-1 text-center px-6 py-3 border-2 border-orange rounded hover:bg-orange hover:text-white duration-300 cursor-pointer"
-                    >50$</label
-                >
-
-                <input type="radio" id="custom" name="donation" value="custom" class="hidden" />
-                <label
-                    for="custom"
-                    class="flex-1 text-center px-6 py-3 border-2 border-orange rounded hover:bg-orange hover:text-white duration-300 cursor-pointer"
-                    >Custom</label
-                >
-            </div>
-        </div>
-        <div id="donationAmountDiv" class="relative rounded-md shadow-sm mt-2" style="display: none;">
+        <p class="my-2">2. Donation amount:</p>
+        <div class="relative rounded-md shadow-sm mt-2">
             <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
                 <span class="text-lightGray text-sm">$</span>
             </div>
             <input
                 type="number"
                 id="donationAmount"
-                step="0.5"
-                min="0.5"
-                class="w-full rounded-md py-1.5 pl-7 pr-12 text-black ring-1 ring-inset ring-[#858ebe] placeholder:text-lightGray outline-none focus:ring-orange text-sm leading-6"
-                placeholder="0,50"
+                step="1"
+                min="1"
+                class="w-full rounded-md py-1.5 pl-7 pr-12 text-black ring-1 ring-inset ring-[#858ebe] placeholder:text-lightGray outline-none focus:ring-orange leading-6"
+                placeholder="1"
                 name="amount"
             />
             <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
-                <span class="text-lightGray text-sm">USD</span>
+                <select
+                    title="Currency"
+                    name="currency"
+                    class="bg-transparent border-none text-lightGray text-sm pointer-events-auto absolute inset-y-0 right-0 flex items-center outline-none"
+                >
+                    {currencies.map((currency) => <option value={currency}>{currency}</option>)}
+                </select>
             </div>
-        </div> -->
-    <button id="testBtn">Submit</button>
-    <!-- </form> -->
+        </div>
+        <button
+            type="submit"
+            class="text-center hover:text-white px-6 py-3 border-2 border-orange disabled:border-[#c79a75] rounded hover:enabled:bg-orange duration-300 mt-2"
+            >Donate 💛
+        </button>
+    </form>
 </dialog>
 
 <script>
@@ -101,22 +233,19 @@
         dialog.close();
     });
 
-    // window.onload = function () {
-    //     var radios = document.getElementsByName("donation");
-    //     var inputDiv = document.getElementById("donationAmountDiv");
+    // Donate form submission
+    document.querySelector("#donationModal").addEventListener("submit", (e) => {
+        e.preventDefault();
+        // Get form data as JSON object
+        const formData = Object.fromEntries(new FormData(e.target).entries());
 
-    //     for (var i = 0; i < radios.length; i++) {
-    //         radios[i].addEventListener("change", function () {
-    //             inputDiv.style.display = this.value === "custom" ? "block" : "none";
-    //         });
-    //     }
-    // };
-
-    document.querySelector("#testBtn").addEventListener("click", () => {
-        pay();
-    });
-    function pay() {
-        fetch("/stripe-checkout", { method: "POST", body: JSON.stringify({ amount: 55, interval: "month", currency: "USD" }) })
+        fetch("/stripe-checkout", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(formData),
+        })
             .then((res) => res.json())
             .then((res) => {
                 if (!res.success) {
@@ -125,11 +254,10 @@
                 }
 
                 // Redirect to Stripe's payment page
-                // @ts-ignore
                 window.location = res.data.redirect_url;
             })
             .catch((e) => {
                 console.error(e);
             });
-    }
+    });
 </script>
