@@ -116,7 +116,7 @@
         pay();
     });
     function pay() {
-        fetch("/stripe-checkout", { method: "POST", body: JSON.stringify({ amount: 55, interval: "subscription", currency: "USD" }) })
+        fetch("/stripe-checkout", { method: "POST", body: JSON.stringify({ amount: 55, interval: "month", currency: "USD" }) })
             .then((res) => res.json())
             .then((res) => {
                 if (!res.success) {

@@ -8,7 +8,7 @@ interface Env {
 interface Body {
     amount: number;
     currency: string;
-    interval: string;
+    interval: string; // 'month' | 'year' | 'payment (one-time)'
 }
 
 export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
@@ -25,13 +25,13 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
         cancelUrl.pathname = '/';
 
         const session = await stripe.checkout.sessions.create({
-            mode: body.interval === 'subscription' ? 'subscription' : 'payment',
+            mode: body.interval === 'payment' ? 'payment' : 'subscription',
             line_items: [
                 {
                     price_data: {
                         currency: body.currency.toLowerCase(),
                         recurring:
-                            body.interval !== 'subscription'
+                            body.interval === 'payment'
                                 ? undefined
                                 : {
                                     interval: body.interval,
