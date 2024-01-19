@@ -6,24 +6,21 @@ import {
     DialogTrigger
 } from "@/ui_components/ui/dialog";
 import { useState } from 'react';
-
+import { toast } from "sonner";
 import CurrencyPicker from "./currency-picker";
 
 export default function DonationModal() {
     const [intervalError, setIntervalError] = useState('');
     const [amountError, setAmountError] = useState('');
     const [currencyError, setCurrencyError] = useState('');
+    const [interval, setInterval] = useState('');
+    const [amount, setAmount] = useState('');
+    const [currency, setCurrency] = useState('');
 
-    const handleSubmit = (event) => {
-        event.preventDefault();
-
+    const handleSubmit = async (event) => {
         event.preventDefault();
 
         // Form validation
-        const interval = document.querySelector('input[name="interval"]:checked')?.value;
-        const amount = document.querySelector('input[name="amount"]').value;
-        const currency = document.querySelector('input[name="currency"]').value;
-
         let intervalError = '';
         let amountError = '';
         let currencyError = '';
@@ -32,7 +29,7 @@ export default function DonationModal() {
         if (!interval) {
             intervalError = 'Please select a donation period.';
         }
-        if (!amount) {
+        if (!amount || amount < 1) {
             amountError = 'Please enter a donation amount.';
         }
         if (!currency) {
@@ -48,38 +45,44 @@ export default function DonationModal() {
             return;
         }
 
-        fetch("/stripe-checkout", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ interval, amount, currency }),
-        })
-            .then((res) => res.json())
-            .then((res) => {
-                if (!res.success) {
-                    console.error(res.error);
-                    setAmountError(res.error);
-                    return;
-                }
-
-                // Redirect to Stripe's payment page
-                window.location = res.data.redirect_url;
-            })
-            .catch((e) => {
-                console.error(e);
+        // If validation passes, send the data to the Cloudflare Function to create a Checkout Session
+        try {
+            const res = await fetch("/stripe-checkout", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ interval, amount, currency }),
             });
+            const data = await res.json();
+            if (!data.success) {
+                console.error(data.error);
+                toast.error("Donation failed", {
+                    description: data.error,
+                })
+                return;
+            }
+            window.location = data.data.redirect_url;
+        } catch (e) {
+            console.error(e);
+            toast.error("Network error", {
+                description: "Couldn't reach the server. Please try again later.",
+            })
+        }
     }
 
     const handleInputChange = (event) => {
         // Clear the error message when the user interacts with the field
         if (event.target.name === 'interval') {
+            setInterval(event.target.value);
             setIntervalError('');
         }
         if (event.target.name === 'amount') {
+            setAmount(event.target.value);
             setAmountError('');
         }
         if (event.target.name === 'currency') {
+            setCurrency(event.target.value);
             setCurrencyError('');
         }
     }
@@ -122,7 +125,7 @@ export default function DonationModal() {
                         <p className="text-red-400 text-sm">{intervalError}</p>
 
                         <p className="text-sm">2. Donation currency:</p>
-                        <CurrencyPicker onChange={handleInputChange}></CurrencyPicker>
+                        <CurrencyPicker aria-label="Select currency" onChange={handleInputChange} value={currency}></CurrencyPicker>
                         <p className="text-red-400 text-sm">{currencyError}</p>
 
                         <p className="text-sm">3. Donation amount:</p>
@@ -134,17 +137,21 @@ export default function DonationModal() {
                                 type="number"
                                 step="1"
                                 min="1"
-                                className="w-full rounded-md py-1.5 pl-7 pr-3 hover:ring-1 focus:ring-1 placeholder:text-gray-400 outline-none hover:ring-orange focus:ring-orange"
+                                className="w-full rounded-md py-1.5 pl-7 pr-14 hover:ring-1 focus:ring-1 placeholder:text-gray-400 outline-none hover:ring-orange focus:ring-orange"
                                 placeholder="1"
                                 name="amount"
                                 onChange={handleInputChange}
+                                value={amount}
                             />
+                            <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3 text-gray-400">
+                                {currency.toUpperCase()}
+                            </div>
                         </div>
                         <p className="text-red-400 text-sm">{amountError}</p>
 
                         <button
                             type="submit"
-                            className="text-center hover:text-white px-6 py-3 border-2 border-orange disabled:border-[#c79a75] rounded hover:enabled:bg-orange duration-300 mt-2"
+                            className="text-center hover:text-white px-6 py-3 border-2 border-orange rounded hover:bg-orange duration-300 mt-2"
                         >
                             Donate 💛
                         </button>

@@ -18,7 +18,7 @@ interface Body {
     interval: string; // 'month' | 'year' | 'payment (one-time)'
 }
 
-// Format the amount to the correct number of decimal places for the currency
+// Format the amount to the correct number of decimal places for the currency (https://stripe.com/docs/currencies#presentment-currencies)
 function formatAmount(currency, amount) {
     const threeDecimalCurrencies = ["bhd", "jod", "kwd", "omr", "tnd"];
     const zeroDecimalCurrencies = [
@@ -49,6 +49,7 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
             httpClient: Stripe.createFetchHttpClient()
         });
 
+        // Create the success and cancel URLs
         const successUrl = new URL(request.url);
         successUrl.pathname = '/';
         const cancelUrl = new URL(request.url);
@@ -79,7 +80,7 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
         return new Response(JSON.stringify({ success: true, data: { redirect_url: session.url } }));
     } catch (e) {
         return new Response(
-            JSON.stringify({ success: false, error: "Payment failed - " + e.message }),
+            JSON.stringify({ success: false, error: e.message }),
             { status: 500 }
         );
     }

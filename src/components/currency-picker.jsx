@@ -19,39 +19,31 @@ import {
 export default function CurrencyPicker({ onChange }) {
     const [open, setOpen] = React.useState(false)
     const [value, setValue] = React.useState("")
-    const scrollRef = React.useRef(null);
 
     const handleSelect = (currentValue) => {
-        setValue(currentValue === value ? "" : currentValue);
+        setValue(currentValue);
         setOpen(false);
         onChange({ target: { name: 'currency', value: currentValue } });
     }
 
-    const handleWheel = (e) => {
-        if (scrollRef.current) {
-            scrollRef.current.scrollTop += e.deltaY;
-        }
-    }
-
     return (
-        <Popover open={open} onOpenChange={setOpen}>
+        <Popover open={open} onOpenChange={setOpen} modal={true}>
             <PopoverTrigger asChild>
                 <Button
                     role="combobox"
                     aria-expanded={open}
                     className="w-full justify-between text-white bg-secondaryGray"
                 >
-                    <input type="hidden" name="currency" value={value.toUpperCase()} />
                     <DollarSign className="mr-2 h-4 w-4" /> {value ? value.toUpperCase() : "Select currency..."}
                     <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                 </Button>
             </PopoverTrigger>
             <PopoverContent className="p-0">
-                <Command>
+                <Command className="bg-secondaryGray text-white">
                     <CommandInput placeholder="Search currency..." />
                     <CommandEmpty>No currency found.</CommandEmpty>
-                    <div ref={scrollRef} onWheel={handleWheel} className="max-h-[200px] overflow-auto">
-                        <CommandGroup>
+                    <div className="max-h-[200px] overflow-auto">
+                        <CommandGroup className="text-white">
                             {currencies.map((currency) => (
                                 <CommandItem
                                     key={currency}
@@ -75,6 +67,7 @@ export default function CurrencyPicker({ onChange }) {
     )
 }
 
+// List of Stripe supported currencies. Remove the ones you don't want to support.
 const currencies = [
     "USD", // United States Dollar
     "EUR", // Euro
