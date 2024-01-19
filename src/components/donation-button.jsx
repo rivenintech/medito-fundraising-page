@@ -58,7 +58,8 @@ export default function DonationModal() {
             .then((res) => res.json())
             .then((res) => {
                 if (!res.success) {
-                    console.log(res.error.title);
+                    console.error(res.error);
+                    setAmountError(res.error);
                     return;
                 }
 
