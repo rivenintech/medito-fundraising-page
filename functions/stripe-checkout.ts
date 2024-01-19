@@ -30,13 +30,13 @@ function formatAmount(currency, amount) {
     const isThreeDecimal = threeDecimalCurrencies.includes(currency.toLowerCase());
 
     if (isZeroDecimal) {
-        return parseInt(amount.toFixed(0));
+        return parseInt(amount);
     } else if (isThreeDecimal) {
         // Round to the nearest ten for three-decimal currencies
         return Math.round(amount / 10) * 10;
     } else {
         // Standard two-decimal currencies
-        return parseInt((amount * 100).toFixed(0));
+        return parseInt(amount) * 100;
     }
 }
 
@@ -50,7 +50,7 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
         });
 
         const successUrl = new URL(request.url);
-        successUrl.pathname = '/success';
+        successUrl.pathname = '/';
         const cancelUrl = new URL(request.url);
         cancelUrl.pathname = '/';
 

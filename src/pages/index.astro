@@ -4,6 +4,7 @@ import SocialBtns from "../components/socialBtns.astro";
 import FaqAccordion from "../components/faq-accordion";
 import DonationBtn from "../components/donation-button";
 import { Toaster } from "@/ui_components/ui/sonner";
+import Notification from "@/components/notification";
 
 const faqs = [
     {
@@ -35,7 +36,6 @@ const rewards = [
     },
 ];
 
-// Generate some different
 const recent_donations = [
     { name: "Adam Kowalski", amount: "$50", time: "1 minute ago" },
     { name: "John Smith", amount: "$25", time: "23 minute ago" },
@@ -43,7 +43,6 @@ const recent_donations = [
 ];
 
 const title = "Support the Development of New Features";
-import Notification from "@/components/notification";
 ---
 
 <Layout title={title}>
@@ -228,6 +227,7 @@ import Notification from "@/components/notification";
     <Toaster position="top-center" closeButton client:load />
 
     <script>
+        // Dummy data
         let totalDuration = 2000;
         let raisedAmount = 80200;
         let goalAmount = 155000;
