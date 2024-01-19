@@ -15,7 +15,7 @@ This is the source code for the Medito Foundation's fundraising page. It's built
   - To make it easy for people to share the fundraising on social media.
 - Donation Notification:
   - Currently, I have set it up without a backend. This button will be removed, and replaced with a backend server on Cloudflare Worker connected to Stripe's Webhook API for automatic notifications.
-- Responsive design.
+- It's also really fast thanks to Astro. It got **100 points in performance on Lighthouse** - [PageSpeed Insights Results](https://pagespeed.web.dev/analysis/https-medito-fundraising-page-pages-dev/1sh90z9bv7?form_factor=mobile).
 
 ## File Structure
 
