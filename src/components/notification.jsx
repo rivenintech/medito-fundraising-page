@@ -5,18 +5,13 @@ import { Button } from "@/ui_components/ui/button"
 export default function Notification() {
     return (
         <Button
-            variant="outline"
             onClick={() =>
-                toast("Event has been created", {
-                    description: "Sunday, December 03, 2023 at 9:00 AM",
-                    action: {
-                        label: "Undo",
-                        onClick: () => console.log("Undo"),
-                    },
+                toast("New donation!", {
+                    description: "Anonymous donated $50",
                 })
             }
         >
-            Show Toast
+            See how notification will look like
         </Button>
     )
 }

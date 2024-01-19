@@ -1,4 +1,5 @@
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/ui_components/ui/accordion";
+import { Turnstile } from '@marsidev/react-turnstile';
 
 export default function FAQAccordion({ faqs, faqsCount }) {
     return (
@@ -13,52 +14,47 @@ export default function FAQAccordion({ faqs, faqsCount }) {
             <AccordionItem key={faqsCount + 1} value={faqsCount + 1}>
                 <AccordionTrigger>I have other questions. How can I get in touch?</AccordionTrigger>
                 <AccordionContent>
-                    <div class="text-sm pb-4">
-                        <form class="flex flex-col gap-5 rounded mb-6" id="contact">
+                    <div className="text-sm pb-4">
+                        <form className="flex flex-col gap-5 rounded mb-6" id="contact">
                             <div>
-                                <p class="uppercase font-medium text-lightGray">Get in touch</p>
-                                <h2 class="text-4xl font-bold">Contact Us.</h2>
+                                <p className="uppercase font-medium text-lightGray">Get in touch</p>
+                                <h2 className="text-4xl font-bold">Contact Us.</h2>
                             </div>
-                            <div class="flex flex-col">
-                                <label for="email" class="mb-2 font-medium">Your Email</label>
+                            <div className="flex flex-col">
+                                <label htmlFor="email" className="mb-2 font-medium">Your Email</label>
                                 <input
                                     name="email"
                                     id="email"
                                     type="email"
                                     placeholder="you@example.com"
-                                    class="p-3 rounded focus:outline-none placeholder-shown:border-none invalid:border invalid:border-red-500 text-black"
+                                    className="p-3 rounded focus:outline-none placeholder-shown:border-none invalid:border invalid:border-red-500"
                                     required
                                 />
                             </div>
-                            <div class="flex flex-col">
-                                <label for="message" class="mb-2 font-medium">Your Message</label>
+                            <div className="flex flex-col">
+                                <label htmlFor="message" className="mb-2 font-medium">Your Message</label>
                                 <textarea
                                     name="message"
                                     id="message"
                                     rows="3"
                                     placeholder="Type your question here... 😁"
-                                    class="p-3 rounded focus:outline-none text-black"
+                                    className="p-3 rounded focus:outline-none"
                                     required></textarea>
                             </div>
 
-                            <div class="flex justify-between">
+                            <div className="flex flex-col md:flex-row justify-between">
                                 <button
                                     type="submit"
-                                    class="text-center px-6 py-3 my-auto border-2 border-orange disabled:border-[#c79a75] rounded hover:enabled:bg-orange duration-300"
+                                    className="text-center px-6 py-3 mb-2 border-2 border-orange rounded hover:bg-orange duration-300"
                                 >
                                     Send
                                 </button>
-                                <div
-                                    class="cf-turnstile"
-                                    data-sitekey={import.meta.env.PROD ? "1x00000000000000000000BB" : "1x00000000000000000000BB"}
-                                    data-theme="light"
-                                >
-                                </div>
+                                <Turnstile siteKey={import.meta.env.PROD ? "1x00000000000000000000AA" : "1x00000000000000000000AA"} />
                             </div>
                         </form>
                     </div>
                 </AccordionContent>
-            </AccordionItem>
-        </Accordion>
+            </AccordionItem >
+        </Accordion >
     )
 }

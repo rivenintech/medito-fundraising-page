@@ -1,4 +1,4 @@
-import { Check, ChevronsUpDown } from "lucide-react"
+import { Check, ChevronsUpDown, DollarSign } from "lucide-react"
 import * as React from "react"
 
 import { cn } from "@/lib/utils"
@@ -37,17 +37,16 @@ export default function CurrencyPicker({ onChange }) {
         <Popover open={open} onOpenChange={setOpen}>
             <PopoverTrigger asChild>
                 <Button
-                    variant="outline"
                     role="combobox"
                     aria-expanded={open}
-                    className="w-[200px] justify-between"
+                    className="w-full justify-between text-white bg-secondaryGray"
                 >
-                    <input type="hidden" name="currency" value={value.toUpperCase()} required />
-                    {value ? value.toUpperCase() : "Select currency..."}
+                    <input type="hidden" name="currency" value={value.toUpperCase()} />
+                    <DollarSign className="mr-2 h-4 w-4" /> {value ? value.toUpperCase() : "Select currency..."}
                     <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                 </Button>
             </PopoverTrigger>
-            <PopoverContent className="w-[200px] p-0">
+            <PopoverContent className="p-0">
                 <Command>
                     <CommandInput placeholder="Search currency..." />
                     <CommandEmpty>No currency found.</CommandEmpty>

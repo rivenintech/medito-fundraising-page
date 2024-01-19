@@ -17,11 +17,11 @@ module.exports = {
             colors: {
                 lightGray: "#858ebe",
                 orange: "#F6B17A",
-                darkGray: "#424769",
             },
             backgroundColor: {
-                bgDark: "#111118",
                 progressBar: "#7077A1",
+                primaryGray: "#0C0D11",
+                secondaryGray: "#16171F",
             },
             fontFamily: {
                 sans: ["Poppins", ...defaultTheme.fontFamily.sans],
