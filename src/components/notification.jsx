@@ -29,6 +29,6 @@ export function CheckDonationStatus() {
             toast.warning("Donation canceled.");
         }
         // replace the current URL without the query parameters
-        window.history.replaceState({}, document.title, "/");
+        // window.history.replaceState({}, document.title, "/");
     });
 }

@@ -53,7 +53,7 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
         const successUrl = new URL(request.url);
         successUrl.search = '?s=success';
         const cancelUrl = new URL(request.url);
-        successUrl.search = '/?s=cancel';
+        cancelUrl.search = '?s=cancel';
 
         const session = await stripe.checkout.sessions.create({
             mode: body.interval === 'payment' ? 'payment' : 'subscription',
