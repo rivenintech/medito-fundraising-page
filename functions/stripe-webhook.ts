@@ -1,47 +1,58 @@
-addEventListener('fetch', event => {
-    event.respondWith(handleRequest(event.request))
-})
+import Stripe from "stripe";
 
-async function handleRequest(request: Request): Promise<Response> {
-    // Verify that the request method is POST
-    if (request.method !== "POST") {
-        return new Response("Invalid request method.", { status: 405 });
+// use web crypto 
+export const webCrypto = Stripe.createSubtleCryptoProvider();
+
+export function getStripe({ env }) {
+  if (!env?.STRIPE_API_KEY) {
+    throw new Error('Can not initialize Stripe without STRIPE_KEY');
+  }
+  const client = new Stripe(env.STRIPE_KEY, {
+    httpClient: Stripe.createFetchHttpClient(), // ensure we use a Fetch client, and not Node's `http`
+  });
+  return client;
+}
+
+export default {
+  async fetch(request, env) {
+    const stripe = getStripe({ env })
+    const body = await request.text()
+    const sig = request.headers.get('stripe-signature')
+
+    const event = await stripe.webhooks.constructEventAsync(
+      body,
+      sig,
+      env.STRIPE_WEBHOOK_SECRET,
+      undefined,
+      webCrypto
+    );
+
+
+    // Handle the event
+    switch (event.type) {
+      case 'payment_intent.succeeded':
+        const paymentIntent = event.data.object;
+        // Then define and call a method to handle the successful payment intent.
+        // handlePaymentIntentSucceeded(paymentIntent);
+        break;
+      case 'payment_method.attached':
+        const paymentMethod = event.data.object;
+        // Then define and call a method to handle the successful attachment of a PaymentMethod.
+        // handlePaymentMethodAttached(paymentMethod);
+        break;
+      case 'product.created':
+        const product = event.data.object;
+        // Then define and call a method to handle the creation of a product.
+        // handleProductCreated(product);
+        break;
+      // ... handle other event types
+      default:
+        console.log(`Unhandled event type ${event.type}`);
     }
 
-    try {
-        // Access the payload of the webhook event
-        const event = await request.json();
-
-        // Handle the event
-        switch (event.type) {
-            case 'payment_intent.succeeded':
-                const paymentIntent = event.data.object;
-                // Then define and call a method to handle the successful payment intent.
-                // handlePaymentIntentSucceeded(paymentIntent);
-                break;
-            case 'payment_method.attached':
-                const paymentMethod = event.data.object;
-                // Then define and call a method to handle the successful attachment of a PaymentMethod.
-                // handlePaymentMethodAttached(paymentMethod);
-                break;
-            case 'product.created':
-                const product = event.data.object;
-                // Then define and call a method to handle the successful creation of a product.
-                // handleProductCreated(product);
-                break;
-            // ... handle other event types
-            default:
-                console.log(`Unhandled event type ${event.type}`);
-        }
-
-        // Return a response to acknowledge receipt of the event
-        return new Response(JSON.stringify({ received: true }), {
-            status: 200,
-            headers: { 'Content-Type': 'application/json' }
-        });
-    } catch (error) {
-        return new Response("Failed to process webhook event.", {
-            status: 500,
-        });
-    }
+    // Return a response to acknowledge receipt of the event
+    return new Response(JSON.stringify({ received: true }), {
+      headers: { 'Content-type': 'application/json' }
+    })
+  }
 }
