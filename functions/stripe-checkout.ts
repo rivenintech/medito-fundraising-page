@@ -51,8 +51,11 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
 
         // Create the success and cancel URLs
         const successUrl = new URL(request.url);
+        successUrl.pathname = '/';
         successUrl.search = '?s=success';
+
         const cancelUrl = new URL(request.url);
+        cancelUrl.pathname = '/';
         cancelUrl.search = '?s=cancel';
 
         const session = await stripe.checkout.sessions.create({
