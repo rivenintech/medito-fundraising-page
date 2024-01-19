@@ -4,7 +4,7 @@ import SocialBtns from "../components/socialBtns.astro";
 import FaqAccordion from "../components/faq-accordion";
 import DonationBtn from "../components/donation-button";
 import { Toaster } from "@/ui_components/ui/sonner";
-import Notification from "@/components/notification";
+import { CheckDonationStatus, NotificationBtn } from "@/components/notification";
 
 const faqs = [
     {
@@ -68,7 +68,7 @@ const title = "Support the Development of New Features";
                     <li>More music options</li>
                     <li>More languages</li>
                 </ul>
-                <Notification client:load />
+                <NotificationBtn client:load />
             </div>
             <div class="flex flex-col gap-2 bg-secondaryGray p-6 rounded-lg">
                 <p class="text-lightGray">
@@ -225,6 +225,7 @@ const title = "Support the Development of New Features";
 
     <!-- Donation Notificatiton Message -->
     <Toaster position="top-center" closeButton richColors client:load />
+    <CheckDonationStatus client:load />
 
     <script>
         // Dummy data
