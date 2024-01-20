@@ -5,6 +5,7 @@ import react from "@astrojs/react";
 
 // https://astro.build/config
 export default defineConfig({
+    site: "https://medito-fundraising-page.pages.dev",
     integrations: [
         tailwind({
             applyBaseStyles: false,

@@ -1,6 +1,6 @@
 ---
 let { title, twitter_handle = "" } = Astro.props;
-let url = encodeURIComponent(Astro.url);
+const url = encodeURIComponent(Astro.url.toString());
 
 if (twitter_handle) {
     twitter_handle = "%20by%20@" + twitter_handle;
