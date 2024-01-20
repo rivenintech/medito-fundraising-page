@@ -1,11 +1,10 @@
 # Medito Fundraising Page
 
-This is the source code for the Medito Foundation's fundraising page. It's built with [Astro](https://astro.build), [Tailwind CSS](https://tailwindcss.com) and
-[shadcn](https://ui.shadcn.com/) for the UI components.
+This is the source code for the Medito Foundation's fundraising page. It's built with [Astro](https://astro.build), [Tailwind CSS](https://tailwindcss.com) and [shadcn/ui](https://ui.shadcn.com/) for the UI components.
 
 ## Features worth mentioning
 
-- It's really fast thanks to Astro. It got **100 points in performance on Lighthouse** - [PageSpeed Insights Results](https://pagespeed.web.dev/analysis/https-medito-fundraising-page-pages-dev/1sh90z9bv7?form_factor=mobile).
+- It's really easy to modify the website's content (just by changing variables) and has great performance thanks to Astro. It got **100 points in performance on Lighthouse on mobile** - [PageSpeed Insights Results](https://pagespeed.web.dev/analysis/https-medito-fundraising-page-pages-dev/1sh90z9bv7?form_factor=mobile).
 - Progress/donate section:
   - The progress bar with percentage, raised amount, and donations counter are animated.
   - Notifications with the amount of the donation and the donor's name are displayed after each donation *(mock data for now)*.
@@ -21,15 +20,17 @@ This is the source code for the Medito Foundation's fundraising page. It's built
 
 ## File Structure
 
-- `/functions` - Cloudflare Worker functions (Stripe Checkout - handles creating the checkout session)
+- `/functions` - Cloudflare Worker functions (Stripe Checkout - handles creating the checkout session).
 - `/src`:
-  - `/components` - Individual components of the website (mainly React components)
-  - `/pages/index.astro` - Main page. Here you can easily modify the content of the website - on top of the file you can see a list of dictionaries with the content of each section.
+  - `/components` - Individual components of the website.
+  - `/pages/index.astro` - **Main page. Here you can easily modify the content of the website** - on top of the file, after imports, you'll variables you can change to modify the content of the website without touching the rest of the code.
+- `tailwind.config.mjs` - Tailwind CSS configuration file (you can change the colors and the font here).
+  - *Share buttons color is defined in its component file (`/src/components/ShareButtons.astro`).*
 
 ## How to deploy to Cloudflare Pages
 
 1. Fork this repository
-2. Go to `astro.config.mjs` and change the `site` to your own domain (to generate share button URLs correctly).
+2. Go to `astro.config.mjs` and change the `site` to your own domain (to generate share buttons URLs correctly).
 3. Create a new project on [Cloudflare Pages](https://pages.cloudflare.com/) > Create new application > Choose Pages > Connect to Git.
 4. Choose your forked repository and choose "Astro" from the framework preset.
 5. (Stripe Setup) - add new environment variables:

@@ -14,15 +14,24 @@ module.exports = {
             },
         },
         extend: {
+            // Change the colors values here
             colors: {
-                lightGray: "#858ebe",
                 orange: "#F6B17A",
+            },
+            ringColor: {
+                darkGray: "#1d1e27",
+            },
+            textColor: {
+                lightGray: "#858ebe",
             },
             backgroundColor: {
                 progressBar: "#7077A1",
                 primaryGray: "#0C0D11",
                 secondaryGray: "#16171F",
             },
+            // Changing the font: https://fontsource.org/docs/getting-started/install#setup
+            // 3rd & 4th step in src/layouts/Layout.astro
+            // Skip 5th step and just change the font name here
             fontFamily: {
                 sans: ["Poppins", ...defaultTheme.fontFamily.sans],
             },

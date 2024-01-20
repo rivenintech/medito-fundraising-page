@@ -90,7 +90,7 @@ export default function DonationModal() {
     return (
         <Dialog>
             <DialogTrigger className="px-6 py-3 border-2 border-orange rounded duration-300 hover:bg-orange">Donate 💛</DialogTrigger>
-            <DialogContent className="bg-primaryGray border-none">
+            <DialogContent className="bg-primaryGray border-none ring-1 ring-darkGray">
                 <DialogHeader>
                     <DialogTitle className="mb-2 text-xl">Donation Form</DialogTitle>
                     <form onSubmit={handleSubmit} className="flex flex-col gap-2">

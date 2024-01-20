@@ -85,7 +85,7 @@ export default function CountUpComponent() {
         fetchData();
 
         // const intervalId = setInterval(fetchData, 5 * 60 * 1000); // Send a request every 5 minutes
-        const intervalId = setInterval(fetchData, 5000);  // Mock data for testing - remove this and use the line above
+        const intervalId = setInterval(fetchData, 7000);  // Mock data for testing - remove this and use the line above
 
         return () => clearInterval(intervalId);
     }, []);
@@ -98,7 +98,7 @@ export default function CountUpComponent() {
             </div>
             <div className="flex w-full h-4 overflow-hidden text-xs font-medium rounded-full flex-start bg-progressBar">
                 <div
-                    className="flex text-white items-center justify-center h-full overflow-hidden bg-[#fcad6c] rounded-full transition-all"
+                    className="flex text-white items-center justify-center h-full overflow-hidden bg-orange rounded-full transition-all"
                     style={{ width: `${progressWidth}%`, transitionDuration: "2500ms" }}
                 >
                     <span ref={progressPerc}>{progressWidth}%</span>

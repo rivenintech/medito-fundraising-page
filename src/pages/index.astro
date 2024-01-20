@@ -44,33 +44,37 @@ const recent_donations = [
 ];
 
 const title = "Support the Development of New Features";
+const description =
+    "Help us bring new features to our meditation app and enhance your mindfulness journey. With your support, we can develop innovative tools and resources to deepen your practice and create a more immersive meditation experience. Join us in this fundraising campaign and contribute to the growth of our app, making meditation accessible to everyone.";
+
+const brand = "Medito Foundation";
+const brand_logo = "https://avatars.githubusercontent.com/u/65036206";
+const brand_description =
+    "Medito Foundation is a nonprofit dedicated to improving mental wellbeing and helping people cope better with depression, stress, anxiety, and any other negative states of mind.";
 ---
 
 <Layout title={title}>
-    <section class="container mx-auto max-w-6xl px-3">
-        <h1 class="text-4xl font-bold text-center mt-6 md:my-12">{title}</h1>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-12 py-12">
-            <div class="flex flex-col gap-4">
-                <div class="flex items-center gap-4 mb-2">
-                    <img class="w-10 h-10 rounded-full" src="https://placehold.co/60x60" alt="Rounded logo" />
-                    <div>
-                        <h2 class="font-semibold text-xl">Brand Name</h2>
-                        <p class="text-sm text-gray-400">Started 6 days ago</p>
-                    </div>
-                </div>
-                <p>
-                    Help us bring new features to our meditation app and enhance your mindfulness journey. With your support, we can develop innovative tools
-                    and resources to deepen your practice and create a more immersive meditation experience. Join us in this fundraising campaign and contribute
-                    to the growth of our app, making meditation accessible to everyone.
-                </p>
+    <section class="container mx-auto max-w-6xl px-3 lg:mt-36">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+            <div class="flex flex-col gap-4 mt-6">
+                <h1 class="text-4xl font-bold text-center lg:text-left">{title}</h1>
+                <p>{description}</p>
                 <ul class="list-disc list-inside">
                     <li>New, better interface</li>
                     <li>More guided meditations</li>
                     <li>More music options</li>
                     <li>More languages</li>
                 </ul>
+                <div class="border-t border-gray-500"></div>
+                <div class="flex items-center gap-4 mb-2">
+                    <img class="w-10 h-10 rounded-full" src={brand_logo} alt="Rounded brand logo" />
+                    <div>
+                        <p class="font-semibold text-lg">{brand}</p>
+                        <p class="text-sm text-gray-400">{brand_description}</p>
+                    </div>
+                </div>
             </div>
-            <div class="flex flex-col gap-2 bg-secondaryGray p-6 rounded-lg">
+            <div class="flex flex-col gap-2 bg-secondaryGray p-6 rounded-lg ring-1 ring-darkGray">
                 <ProgressSection client:load />
                 <DonationBtn client:load />
                 <div class="flex items-center justify-end mt-2 mb-4">
@@ -78,7 +82,7 @@ const title = "Support the Development of New Features";
                     <SocialBtns title={title} />
                 </div>
                 <div>
-                    <h2 class="font-semibold text-xl">Recent donations:</h2>
+                    <p class="font-semibold text-xl">Recent donations:</p>
                     {
                         recent_donations.map((donation) => (
                             <div class="flex items-center p-2">
@@ -135,7 +139,10 @@ const title = "Support the Development of New Features";
         <div class="grid grid-cols-1 md:grid-cols-2 gap-12 mt-6 lg:grid-cols-4">
             {
                 rewards.map((reward) => (
-                    <a href="#top" class="flex flex-col gap-5 rounded-lg hover:scale-105 cursor-pointer duration-300 p-6 bg-secondaryGray group">
+                    <a
+                        href="#top"
+                        class="flex flex-col gap-5 rounded-lg hover:scale-105 cursor-pointer duration-300 p-6 bg-secondaryGray group ring-1 ring-darkGray"
+                    >
                         <h3 class="font-medium text-lightGray text-center">{reward.title}</h3>
                         <p class="text-center font-semibold text-xl">{reward.amount}</p>
                         <ul class="space-y-3 text-center">
