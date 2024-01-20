@@ -1,20 +1,5 @@
-import { Button } from "@/ui_components/ui/button";
 import { useEffect } from "react";
 import { toast } from "sonner";
-
-export function NotificationBtn() {
-    return (
-        <Button
-            onClick={() =>
-                toast("New donation!", {
-                    description: "Anonymous donated $50",
-                })
-            }
-        >
-            See how notification will look like
-        </Button>
-    );
-}
 
 // Check the URL for the query parameter and display a toast notification based on the value
 // Stripe Checkout uses the query parameter to indicate the status of the payment

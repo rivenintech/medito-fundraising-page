@@ -1,10 +1,11 @@
 ---
-import Layout from "../layouts/Layout.astro";
-import SocialBtns from "../components/socialBtns.astro";
-import FaqAccordion from "../components/faq-accordion";
-import DonationBtn from "../components/donation-button";
+import { CheckDonationStatus } from "@/components/checkout-notification";
+import ProgressSection from "@/components/progress-section";
 import { Toaster } from "@/ui_components/ui/sonner";
-import { CheckDonationStatus, NotificationBtn } from "@/components/notification";
+import DonationBtn from "../components/donation-button";
+import FaqAccordion from "../components/faq-accordion";
+import SocialBtns from "../components/socialBtns.astro";
+import Layout from "../layouts/Layout.astro";
 
 const faqs = [
     {
@@ -68,22 +69,9 @@ const title = "Support the Development of New Features";
                     <li>More music options</li>
                     <li>More languages</li>
                 </ul>
-                <NotificationBtn client:load />
             </div>
             <div class="flex flex-col gap-2 bg-secondaryGray p-6 rounded-lg">
-                <p class="text-lightGray">
-                    <span class="text-2xl text-orange font-medium" id="raised">$142,952</span> raised of <span id="goal">$155,000</span> goal
-                </p>
-                <div class="flex w-full h-4 overflow-hidden text-xs font-medium rounded-full flex-start bg-progressBar">
-                    <div
-                        id="progressBar"
-                        class="flex text-white items-center justify-center h-full overflow-hidden bg-[#fcad6c] rounded-full transition-all"
-                        style="width: 0%; transition-duration: 2000ms;"
-                    >
-                        0%
-                    </div>
-                </div>
-                <p id="donatorsCount" class="text-lightGray mb-4">0 donations</p>
+                <ProgressSection client:load />
                 <DonationBtn client:load />
                 <div class="flex items-center justify-end mt-2 mb-4">
                     <p class="pr-3">Share:</p>
@@ -226,41 +214,4 @@ const title = "Support the Development of New Features";
     <!-- Donation Notificatiton Message -->
     <Toaster position="top-center" closeButton richColors client:load />
     <CheckDonationStatus client:load />
-
-    <script>
-        // Dummy data
-        let totalDuration = 2000;
-        let raisedAmount = 80200;
-        let goalAmount = 155000;
-        let donators = 3300;
-        let progress = Math.round((raisedAmount / goalAmount) * 100);
-
-        // Progress bar
-        const progressBar = document.getElementById("progressBar");
-        progressBar.style.width = `${Math.min(progress, 100)}%`;
-
-        // Animate progress bar text percentage
-        let currentProgress = 0;
-        const stepDuration = totalDuration / progress;
-
-        const interval = setInterval(() => {
-            if (currentProgress >= progress) {
-                clearInterval(interval);
-            } else {
-                currentProgress += 1;
-                progressBar.textContent = `${currentProgress}%`;
-            }
-        }, stepDuration);
-        progressBar.textContent = `${progress}%`;
-
-        // Donators count
-        const donatorsCount = document.getElementById("donatorsCount");
-        donatorsCount.textContent = `${donators.toLocaleString("en-US")} donations`;
-
-        // Raised and goal amount
-        const raised = document.getElementById("raised");
-        const goal = document.getElementById("goal");
-        raised.textContent = `$${raisedAmount.toLocaleString("en-US")}`;
-        goal.textContent = `$${goalAmount.toLocaleString("en-US")}`;
-    </script>
 </Layout>
