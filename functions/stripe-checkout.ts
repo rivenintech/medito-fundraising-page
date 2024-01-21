@@ -29,14 +29,21 @@ function formatAmount(currency, amount) {
     const isZeroDecimal = zeroDecimalCurrencies.includes(currency.toLowerCase());
     const isThreeDecimal = threeDecimalCurrencies.includes(currency.toLowerCase());
 
+    amount = Number(amount);
+
+    if (isNaN(amount)) {
+        throw new Error('Donation amount must be a number.');
+    }
+
     if (isZeroDecimal) {
-        return parseInt(amount);
+        // Remove decimal points
+        return Math.trunc(amount);
     } else if (isThreeDecimal) {
         // Round to the nearest ten for three-decimal currencies
-        return Math.round(amount / 10) * 10;
+        return Math.round(amount * 100) * 10;
     } else {
-        // Standard two-decimal currencies
-        return parseInt(amount) * 100;
+        // Standard two-decimal currencies (remove decimal points)
+        return Math.trunc(amount * 100);
     }
 }
 
