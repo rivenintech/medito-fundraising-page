@@ -7,6 +7,8 @@ import FaqAccordion from "../components/faq-accordion";
 import SocialBtns from "../components/socialBtns.astro";
 import Layout from "../layouts/Layout.astro";
 
+const baseCurrency = "usd";
+
 const faqs = [
     {
         question: "Why should I contribute to the fundraising campaign for your meditation app?",
@@ -23,32 +25,32 @@ const faqs = [
 ];
 
 const rewards = [
-    { title: "Tier 1: Beginner Bliss ✨", amount: "$5", benefits: ["Special rank on Discord"] },
-    { title: "Tier 2: Zen Master 🧘‍♂️", amount: "$10", benefits: ["Tier 1 rewards", "Special newsletter"] },
+    { tier: 1, title: "Tier 1: Beginner Bliss ✨", amount: 5, benefits: ["Special rank on Discord"] },
+    { tier: 2, title: "Tier 2: Zen Master 🧘‍♂️", amount: 15, benefits: ["Tier 1 rewards", "Special newsletter"] },
     {
+        tier: 3,
         title: "Tier 3: Mindful Explorer 🌍",
-        amount: "$25",
+        amount: 25,
         benefits: ["Tier 1 & 2 rewards", "Access to a private community", "Early access to new features and updates"],
     },
     {
+        tier: 4,
         title: "Tier 4: Enlightened Guru 🙏",
-        amount: "$50+",
+        amount: 50,
         benefits: ["Tier 1, 2 & 3 rewards", "Personalized meditation recommendations", "Monthly live Q&A sessions with meditation experts"],
     },
 ];
 
 const recent_donations = [
-    { name: "Adam Kowalski", amount: "$50", time: "1 minute ago" },
-    { name: "John Smith", amount: "$25", time: "23 minute ago" },
-    { name: "Jane Doe", amount: "$10", time: "3 hours ago" },
+    { id: 1, name: "Adam Kowalski", amount: "$50", time: "1 minute ago" },
+    { id: 2, name: "John Smith", amount: "$25", time: "23 minute ago" },
+    { id: 3, name: "Jane Doe", amount: "$10", time: "3 hours ago" },
 ];
 
 const title = "Support the Development of New Features";
-const description =
-    "Help us bring new features to our meditation app and enhance your mindfulness journey. With your support, we can develop innovative tools and resources to deepen your practice and create a more immersive meditation experience. Join us in this fundraising campaign and contribute to the growth of our app, making meditation accessible to everyone.";
 
 const brand = "Medito Foundation";
-const brand_logo = "https://avatars.githubusercontent.com/u/65036206";
+const brand_logo = "/logo.png";
 const brand_description =
     "Medito Foundation is a nonprofit dedicated to improving mental wellbeing and helping people cope better with depression, stress, anxiety, and any other negative states of mind.";
 ---
@@ -58,13 +60,16 @@ const brand_description =
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
             <div class="flex flex-col gap-4 mt-6">
                 <h1 class="text-4xl font-bold text-center lg:text-left">{title}</h1>
-                <p>{description}</p>
+                <p>
+                    Help us bring new features to our meditation app and enhance your mindfulness journey. With your support, we can develop innovative tools
+                    and resources to deepen your practice and create a more immersive meditation experience.
+                </p>
                 <ul class="list-disc list-inside">
                     <li>New, better interface</li>
                     <li>More guided meditations</li>
-                    <li>More music options</li>
                     <li>More languages</li>
                 </ul>
+                <p>Join us in this fundraising campaign and contribute to the growth of our app, making meditation accessible to everyone. ❤️</p>
                 <div class="border-t border-gray-500"></div>
                 <div class="flex items-center gap-4 mb-2">
                     <img class="w-10 h-10 rounded-full" src={brand_logo} alt="Rounded brand logo" />
@@ -76,16 +81,16 @@ const brand_description =
             </div>
             <div class="flex flex-col gap-2 bg-secondaryGray p-6 rounded-lg ring-1 ring-darkGray">
                 <ProgressSection client:load />
-                <DonationBtn client:load />
+                <DonationBtn baseCurrency={baseCurrency} rewards={rewards} client:load />
                 <div class="flex items-center justify-end mt-2 mb-4">
                     <p class="pr-3">Share:</p>
                     <SocialBtns title={title} />
                 </div>
-                <div>
+                <div class="overflow-hidden">
                     <p class="font-semibold text-xl">Recent donations:</p>
                     {
                         recent_donations.map((donation) => (
-                            <div class="flex items-center p-2">
+                            <div class="flex items-center p-2 animate-in slide-in-from-left">
                                 <svg width="42" height="42" fill="none" viewBox="0 0 24 24" class="mr-3">
                                     <path
                                         stroke="white"
@@ -144,7 +149,7 @@ const brand_description =
                         class="flex flex-col gap-5 rounded-lg hover:scale-105 cursor-pointer duration-300 p-6 bg-secondaryGray group ring-1 ring-darkGray"
                     >
                         <h3 class="font-medium text-lightGray text-center">{reward.title}</h3>
-                        <p class="text-center font-semibold text-xl">{reward.amount}</p>
+                        <p class="text-center font-semibold text-xl">${reward.amount}</p>
                         <ul class="space-y-3 text-center">
                             {reward.benefits.map((benefit) => (
                                 <li>{benefit}</li>

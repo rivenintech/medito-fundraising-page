@@ -9,13 +9,36 @@ import { useState } from 'react';
 import { toast } from "sonner";
 import CurrencyPicker from "./currency-picker";
 
-export default function DonationModal() {
+export default function DonationModal({ baseCurrency, rewards }) {
     const [intervalError, setIntervalError] = useState('');
     const [amountError, setAmountError] = useState('');
     const [currencyError, setCurrencyError] = useState('');
     const [interval, setInterval] = useState('');
     const [amount, setAmount] = useState('');
     const [currency, setCurrency] = useState('');
+    const [exchangeRate, setExchangeRate] = useState(1);
+    const [tier, setTier] = useState('');
+
+    rewards.sort((a, b) => a.amount - b.amount);
+    const zeroDecimalCurrencies = ["BIF", "CLP", "DJF", "GNF", "JPY", "KMF", "KRW", "MGA", "PYG", "RWF", "UGX", "VND", "VUV", "XAF", "XOF", "XPF"];
+    const isZeroDecimal = zeroDecimalCurrencies.includes(baseCurrency);
+    const rewardsConv = rewards.map((reward) => {
+        return {
+            ...reward,
+            amount: convertCurrency(reward.amount)
+        }
+    });
+    const maxAmount = rewardsConv[rewardsConv.length - 1].amount;
+
+    function convertCurrency(amount) {
+        const value = Math.round(amount * exchangeRate * 100) / 100;
+
+        if (isZeroDecimal) {
+            return Math.round(value);
+        }
+
+        return value;
+    }
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -71,19 +94,38 @@ export default function DonationModal() {
         }
     }
 
-    const handleInputChange = (event) => {
+    const handleInputChange = async (event) => {
         // Clear the error message when the user interacts with the field
         if (event.target.name === 'interval') {
             setInterval(event.target.value);
             setIntervalError('');
         }
         if (event.target.name === 'amount') {
-            setAmount(event.target.value);
+            const value = Number(event.target.value);
+            setAmount(value === 0 ? '' : value);
             setAmountError('');
+
+            // Set the highest tier based on the amount
+            setTier('');
+            rewardsConv.forEach((reward) => {
+                if (value >= reward.amount) {
+                    setTier(`Tier ${reward.tier}`);
+                }
+            });
         }
         if (event.target.name === 'currency') {
-            setCurrency(event.target.value);
+            const value = event.target.value;
+            setCurrency(value.toUpperCase());
             setCurrencyError('');
+
+            // Make an API request when the currency is selected
+            try {
+                const res = await fetch(`https://cdn.jsdelivr.net/gh/fawazahmed0/currency-api@1/latest/currencies/${baseCurrency}/${value}.json`);
+                const data = await res.json();
+                setExchangeRate(data[value]);
+            } catch (e) {
+                console.error(e);
+            }
         }
     }
 
@@ -135,29 +177,67 @@ export default function DonationModal() {
                             </div>
                             <input
                                 type="number"
-                                step="1"
+                                step={isZeroDecimal ? "1" : "0.01"}
                                 min="1"
                                 className="w-full rounded-md py-1.5 pl-7 pr-14 hover:ring-1 focus:ring-1 placeholder:text-gray-400 outline-none hover:ring-orange focus:ring-orange"
-                                placeholder="1"
+                                placeholder="1.50"
                                 name="amount"
                                 onChange={handleInputChange}
                                 value={amount}
                             />
                             <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3 text-gray-400">
-                                {currency.toUpperCase()}
+                                {currency}
                             </div>
                         </div>
                         <p className="text-red-400 text-sm">{amountError}</p>
+
+                        {currency && (
+                            <div>
+                                <p className="text-sm text-center text-gray-400 mb-1">Donation Reward Tiers</p>
+                                <div className="relative flex h-4 overflow-hidden text-xs rounded-full bg-progressBar">
+                                    {rewardsConv.map((reward, index) => (
+                                        <div
+                                            key={index}
+                                            className="border-r"
+                                            style={{ width: `${(reward.amount - (rewardsConv[index - 1]?.amount || 0)) / maxAmount * 100}%` }}>
+                                        </div>
+                                    ))}
+                                    <div
+                                        className="absolute flex items-center justify-center h-full bg-orange transition-all"
+                                        style={{ width: `${Math.min(amount / maxAmount * 100, 100)}%`, transitionDuration: "2500ms" }}
+                                    >
+                                        <span className="truncate">{tier}</span>
+                                    </div>
+                                </div>
+                                <div className="relative mt-2 text-xs">
+                                    {rewardsConv.slice(0, -1).map((reward, index) => (
+                                        <div
+                                            key={index}
+                                            className="absolute transform -translate-x-1/2 -translate-y-1/2 flex flex-col items-center"
+                                            style={{ left: `${reward.amount / maxAmount * 100}%` }}
+                                        >
+                                            <p>{reward.amount} {currency}</p>
+                                        </div>
+                                    ))}
+                                    <div
+                                        className="absolute transform -translate-y-1/2 flex flex-col items-center"
+                                        style={{ right: "0%" }}
+                                    >
+                                        <p>{maxAmount} {currency}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
 
                         <button
                             type="submit"
                             className="text-center hover:text-white px-6 py-3 border-2 border-orange rounded hover:bg-orange duration-300 mt-2"
                         >
-                            Donate 💛
+                            Donate {amount.toLocaleString("en-US")} {currency} {(interval === "month" || interval === "year") && `(${interval}ly)`}
                         </button>
                     </form>
                 </DialogHeader>
             </DialogContent>
-        </Dialog>
+        </Dialog >
     )
 }
