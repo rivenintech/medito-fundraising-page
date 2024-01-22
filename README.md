@@ -10,6 +10,7 @@ This is the source code for the Medito Foundation's fundraising page. It's built
   - Notifications with the amount of the donation and the donor's name are displayed after each donation *(mock data for now)*.
 - Donation form modal after clicking the "Donate" button:
   - Supports all currencies supported by Stripe (135+)! But it's really easy to remove the ones you don't want to support.
+  - Currency exchange from API for donation tiers with progress bar.
   - Supports one-off and recurring donations (monthly/yearly).
   - Connected to Stripe's TEST API, so you can see that it works properly. [(https://stripe.com/docs/testing#testing-interactively)](https://stripe.com/docs/testing#testing-interactively)
   - Includes client-side validation and Stripe's server-side validation. If the user enters invalid data, a notification with a Stripe error message will be displayed.
@@ -43,6 +44,7 @@ This is the source code for the Medito Foundation's fundraising page. It's built
 Unfortunately, I found out about this project a bit late. But I'll continue working on it. Here are some improvements I have planned:
 
 - Make "recent donations" animated.
+- Change displayed currency based on the user's choice.
 - Connect the contact form with MailChannels API to send questions to your inbox.
 - Add a database to store the donations, and finish the Stripe Webhook API integration to update the donation counter and recent donations.
 
