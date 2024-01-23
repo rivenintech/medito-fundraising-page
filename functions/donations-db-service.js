@@ -1,4 +1,7 @@
-const Stripe = require("stripe");
+import { Router } from "itty-router";
+import Stripe from "stripe";
+
+const router = Router();
 
 router.post("/", async (req, env) => {
     console.log("Received a POST request to");
