@@ -1,4 +1,4 @@
-import { Router, json } from "itty-router";
+import { Router, error, json } from "itty-router";
 
 // Create a router instance
 const router = Router();
