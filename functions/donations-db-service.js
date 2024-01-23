@@ -1,12 +1,21 @@
 const Stripe = require("stripe");
 
 export async function onRequest(context) {
+    console.log("TESTING");
     const url = new URL(context.request.url);
 
     if (url.pathname === "/webhook") {
-        return await handleWebhook(context);
+        if (method === "POST") {
+            return await handleWebhook(context);
+        } else {
+            return new Response("Method Not Allowed", { status: 405 });
+        }
     } else if (url.pathname === "/donations") {
-        return await getDonations(context);
+        if (method === "GET") {
+            return await getDonations(context);
+        } else {
+            return new Response("Method Not Allowed", { status: 405 });
+        }
     } else {
         return new Response("Not found", { status: 404 });
     }
