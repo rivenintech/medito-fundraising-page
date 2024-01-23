@@ -3,7 +3,7 @@ const Stripe = require("stripe");
 export async function onRequestPost(context) {
     console.log("Received a POST request to");
     const stripe = new Stripe(context.env.STRIPE_API_KEY);
-    const signature = context.request.headers.get("stripe-signature");
+    const signature = context.request.raw.headers.get("stripe-signature");
     try {
         if (!signature) {
             return new Response("", { status: 400 });
