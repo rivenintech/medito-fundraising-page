@@ -3,12 +3,12 @@ const Stripe = require("stripe");
 export async function onRequestPost(context) {
     console.log("Received a POST request to");
     const stripe = new Stripe(context.env.STRIPE_API_KEY);
-    const signature = context.request.raw.headers.get("stripe-signature");
+    const signature = context.req.raw.headers.get("stripe-signature");
     try {
         if (!signature) {
             return new Response("", { status: 400 });
         }
-        const body = await context.request.text();
+        const body = await context.req.text();
         const event = await stripe.webhooks.constructEventAsync(
             body,
             signature,
