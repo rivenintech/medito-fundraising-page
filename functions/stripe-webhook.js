@@ -3,14 +3,11 @@ import Stripe from "stripe";
 export async function onRequestPost(context) {
     const stripe = new Stripe(context.env.STRIPE_API_KEY);
     const signature = context.request.headers.get("stripe-signature");
-    console.log("TEST1", signature);
     try {
         if (!signature) {
             return new Response("", { status: 400 });
         }
-        console.log("TEST2");
         const body = await context.request.text();
-        console.log("TEST3", body);
         const event = await stripe.webhooks.constructEventAsync(
             body,
             signature,
@@ -26,9 +23,14 @@ export async function onRequestPost(context) {
                 const exchange_rate = transaction.exchange_rate || 1; // Assign default value of 1 if exchange_rate is null
                 const amount = Math.round(data.amount * exchange_rate); // Convert the amount to the currency of the Stripe account
                 // Insert the donation into the database
-                await context.env.DONATIONS_DB.prepare("INSERT INTO donations (id, amount, donor_name, donor_email) VALUES (?1, ?2, ?3, ?4)")
+                const db = context.env.DONATIONS_DB;
+                await db
+                    .prepare("INSERT INTO donations (id, amount, donor_name, donor_email) VALUES (?1, ?2, ?3, ?4)")
                     .bind(data.id, amount, donor_details.name, donor_details.email)
                     .run();
+                // Update donation_progress table
+                const { raised_amount, donations_count } = await db.prepare("SELECT COUNT(*) AS count, SUM(amount) AS raised FROM donations").first();
+                await db.prepare("UPDATE donation_progress SET raised_amount = ?1, donations_count = ?2").bind(raised_amount, donations_count).run();
                 break;
             }
             default:
