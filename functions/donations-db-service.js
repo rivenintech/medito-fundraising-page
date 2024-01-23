@@ -1,28 +1,8 @@
 const Stripe = require("stripe");
 
-export async function onRequest(context) {
-    console.log("TESTING");
-    const url = new URL(context.request.url);
-
-    if (url.pathname === "/webhook") {
-        if (method === "POST") {
-            return await handleWebhook(context);
-        } else {
-            return new Response("Method Not Allowed", { status: 405 });
-        }
-    } else if (url.pathname === "/donations") {
-        if (method === "GET") {
-            return await getDonations(context);
-        } else {
-            return new Response("Method Not Allowed", { status: 405 });
-        }
-    } else {
-        return new Response("Not found", { status: 404 });
-    }
-}
-
-async function handleWebhook(context) {
-    const stripe = createStripeClient(process.env.STRIPE_API_KEY);
+export async function onRequestPost(context) {
+    console.log("Received a POST request to");
+    const stripe = new Stripe(process.env.STRIPE_API_KEY);
     const signature = context.request.headers.get("stripe-signature");
     try {
         if (!signature) {
@@ -58,14 +38,4 @@ async function handleWebhook(context) {
         console.log(errorMessage);
         return new Response(errorMessage, { status: 400 });
     }
-}
-
-// Get the latest 5 donations from the database
-async function getDonations(context) {
-    const data = await context.env.DONATIONS_DB.prepare("SELECT * FROM donations LIMIT 5").all();
-
-    return Response.json(data);
-
-    // const rows = await DB.prepare("SELECT * FROM donations ORDER BY timestamp DESC LIMIT 5").all();
-    // return new Response(JSON.stringify(rows), { headers: { "Content-Type": "application/json" } });
 }
