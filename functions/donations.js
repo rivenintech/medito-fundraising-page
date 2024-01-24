@@ -9,7 +9,7 @@ export async function onRequestGet(context) {
         .bind(activeFundraiserID)
         .first();
     const { results } = await context.env.DONATIONS_DB.prepare(
-        "SELECT donorName, amount, timestamp FROM Donations WHERE fundraiserID = ?1 ORDER BY timestamp DESC LIMIT 3"
+        "SELECT id, donorName, amount, timestamp FROM Donations WHERE fundraiserID = ?1 ORDER BY timestamp DESC LIMIT 3"
     )
         .bind(activeFundraiserID)
         .all();
