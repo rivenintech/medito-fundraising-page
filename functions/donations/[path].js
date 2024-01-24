@@ -1,11 +1,10 @@
-import { Router, error, json } from "itty-router";
-
-// Create a router instance
-const router = Router({ base: "donations" });
-
-// Get the total amount raised and the number of donations
-router
-    .get("/progress", (req, env, ctx) => env.DONATIONS_DB.prepare("SELECT raised_amount, donations_count FROM donation_progress").first())
-    .all("*", () => error(404));
-
-export const onRequest = (req, env, ctx) => router.handle(req, env, ctx).then(json).catch(error);
+export async function onRequestGet(context) {
+    if (context.params.path === "progress") {
+        const data = await context.env.DONATIONS_DB.prepare("SELECT raised_amount, donations_count FROM donation_progress").first();
+        return new Response(JSON.stringify(data), {
+            headers: {
+                "content-type": "application/json",
+            },
+        });
+    }
+}
