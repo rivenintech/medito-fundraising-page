@@ -1,7 +1,7 @@
 import { Router, error, json } from "itty-router";
 
 // Create a router instance
-const router = Router();
+const router = Router({ base: "donations" });
 
 // Get the total amount raised and the number of donations
 router
