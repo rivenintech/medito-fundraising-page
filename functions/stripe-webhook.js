@@ -29,9 +29,8 @@ export async function onRequestPost(context) {
                     .bind(data.id, amount, donor_details.name, donor_details.email)
                     .run();
                 // Update donation_progress table
-                const getData = await db.prepare("SELECT COUNT(*) AS count, SUM(amount) AS raised FROM donations").first();
-                console.log(getData);
-                // await db.prepare("UPDATE donation_progress SET raised_amount = ?1, donations_count = ?2").bind(getData[], donations_count).run();
+                const { raised, donations_count } = await db.prepare("SELECT SUM(amount) AS raised, COUNT(*) AS donations_count FROM donations").first();
+                await db.prepare("UPDATE donation_progress SET raised_amount = ?1, donations_count = ?2").bind(raised, donations_count).run();
                 break;
             }
             default:
