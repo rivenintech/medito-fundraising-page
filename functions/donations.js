@@ -5,7 +5,7 @@ export async function onRequestGet(context) {
         return new Response("No active fundraiser", { status: 404 });
     }
 
-    const data = await context.env.DONATIONS_DB.prepare("SELECT totalRaised, goalAmount, totalDonations FROM Fundraisers WHERE id = ?1")
+    const data = await context.env.DONATIONS_DB.prepare("SELECT title, description, totalRaised, goalAmount, totalDonations FROM Fundraisers WHERE id = ?1")
         .bind(activeFundraiserID)
         .first();
     const { results } = await context.env.DONATIONS_DB.prepare(

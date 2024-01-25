@@ -40,6 +40,21 @@ export default function DonationModal({ baseCurrency, rewards }) {
         return value;
     }
 
+    function nFormatter(num, digits) {
+        const lookup = [
+            { value: 1, symbol: "" },
+            { value: 1e3, symbol: "k" },
+            { value: 1e6, symbol: "M" },
+            { value: 1e9, symbol: "G" },
+            { value: 1e12, symbol: "T" },
+            { value: 1e15, symbol: "P" },
+            { value: 1e18, symbol: "E" }
+        ];
+        const regexp = /\.0+$|(?<=\.[0-9]*[1-9])0+$/;
+        const item = lookup.findLast(item => num >= item.value);
+        return item ? (num / item.value).toFixed(digits).replace(regexp, "").concat(item.symbol) : "0";
+    }
+
     const handleSubmit = async (event) => {
         event.preventDefault();
 
@@ -216,14 +231,14 @@ export default function DonationModal({ baseCurrency, rewards }) {
                                             className="absolute transform -translate-x-1/2 -translate-y-1/2 flex flex-col items-center"
                                             style={{ left: `${reward.amount / maxAmount * 100}%` }}
                                         >
-                                            <p>{reward.amount} {currency}</p>
+                                            <p>{nFormatter(reward.amount, 2)}</p>
                                         </div>
                                     ))}
                                     <div
                                         className="absolute transform -translate-y-1/2 flex flex-col items-center"
                                         style={{ right: "0%" }}
                                     >
-                                        <p>{maxAmount} {currency}</p>
+                                        <p>{nFormatter(maxAmount, 2)} {currency}</p>
                                     </div>
                                 </div>
                             </div>

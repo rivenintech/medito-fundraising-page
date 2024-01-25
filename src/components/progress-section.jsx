@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { toast } from "sonner";
+import { updateRecentDonations, updateFundraiserInfo } from "../stateVariables.js";
 
 const countUpOptions = {
     raised: { duration: 3, prefix: '$' },
@@ -11,9 +12,10 @@ export default function CountUpComponent() {
     const raised = useRef(null);
     const progressPerc = useRef(null);
     const donations = useRef(null);
-    const [raisedAmount, setRaisedAmount] = useState(0);
+    const [newestTimestamp, setNewestTimestamp] = useState(0);
+    const [totalRaised, setTotalRaised] = useState(0);
     const [goalAmount, setGoalAmount] = useState(0);
-    const [donationsAmount, setDonationsAmount] = useState(0);
+    const [totalDonations, setTotalDonations] = useState(0);
     const [progressWidth, setProgressWidth] = useState(0);
 
     const raisedCountUp = useRef(null);
@@ -31,42 +33,43 @@ export default function CountUpComponent() {
         }
     }
 
-    // Mock data for testing - remove this when you integrate with your API
-    let mockRaisedAmount = 0;
-    const mockGoalAmount = 80000;
-    let mockDonationsAmount = 0;
-
-    const mockFetchData = async () => {
-        mockRaisedAmount += 3500;
-        mockDonationsAmount += 15;
-
-        return {
-            raisedAmount: mockRaisedAmount,
-            goalAmount: mockGoalAmount,
-            donationsAmount: mockDonationsAmount
-        };
-    };
-    // ==============================================
-
     useEffect(() => {
         const fetchData = async () => {
-            // Uncomment the following lines to fetch data from your API
-            // const response = await fetch('https://your-api-url.com');
-            // const data = await response.json();
-            const data = await mockFetchData(); // Mock data for testing - remove this when you integrate with your API
-            toast.success("New donation!", {
-                description: "Anonymous donated $100", // Mock data for testing - modify this when you integrate with your API
-            })
-            setRaisedAmount(data.raisedAmount);
+            const response = await fetch('/donations');
+            const { data, recent_donations } = await response.json();
+
+            updateFundraiserInfo(data.title, data.description);
+
+            // If there are no new donations, don't update the UI
+            if (new Date(recent_donations[0].timestamp) === newestTimestamp) {
+                return;
+            }
+
+            // Send notifications for each new donation
+            recent_donations.forEach((donation) => {
+                donation.timestamp = new Date(donation.timestamp);
+
+                if (donation.timestamp > newestTimestamp) {
+                    toast.success(`New donation from ${donation.donorName}!`, {
+                        description: `Thank you for donating ${donation.amount}.`,
+                    })
+                }
+            });
+
+            // Update the newest timestamp
+            setNewestTimestamp(recent_donations[0].timestamp);
+
+            updateRecentDonations(recent_donations);
+            setTotalRaised(data.totalRaised);
             setGoalAmount(data.goalAmount);
-            setDonationsAmount(data.donationsAmount);
-            const percentage = (data.raisedAmount / data.goalAmount) * 100;
+            setTotalDonations(data.totalDonations);
+            const percentage = (data.totalRaised / data.goalAmount) * 100;
             setProgressWidth(percentage);
 
             if (raisedCountUp.current) {
-                raisedCountUp.current.update(data.raisedAmount);
+                raisedCountUp.current.update(data.totalRaised);
             } else {
-                raisedCountUp.current = await initCountUp(raised, data.raisedAmount, countUpOptions.raised);
+                raisedCountUp.current = await initCountUp(raised, data.totalRaised, countUpOptions.raised);
             }
 
             if (progressCountUp.current) {
@@ -76,16 +79,15 @@ export default function CountUpComponent() {
             }
 
             if (donationsCountUp.current) {
-                donationsCountUp.current.update(data.donationsAmount);
+                donationsCountUp.current.update(data.totalDonations);
             } else {
-                donationsCountUp.current = await initCountUp(donations, data.donationsAmount, countUpOptions.donations);
+                donationsCountUp.current = await initCountUp(donations, data.totalDonations, countUpOptions.donations);
             }
         };
 
         fetchData();
 
-        // const intervalId = setInterval(fetchData, 5 * 60 * 1000); // Send a request every 5 minutes
-        const intervalId = setInterval(fetchData, 7000);  // Mock data for testing - remove this and use the line above
+        const intervalId = setInterval(fetchData, 30 * 1000); // Send a request every 30 seconds
 
         return () => clearInterval(intervalId);
     }, []);
@@ -93,7 +95,7 @@ export default function CountUpComponent() {
     return (
         <>
             <div className="text-lightGray">
-                <span className="text-2xl text-orange font-medium mr-2" ref={raised}>${raisedAmount}</span>
+                <span className="text-2xl text-orange font-medium mr-2" ref={raised}>${totalRaised}</span>
                 raised of ${goalAmount.toLocaleString("en-US")} goal
             </div>
             <div className="flex w-full h-4 overflow-hidden text-xs font-medium rounded-full flex-start bg-progressBar">
@@ -104,7 +106,7 @@ export default function CountUpComponent() {
                     <span ref={progressPerc}>{progressWidth}%</span>
                 </div>
             </div>
-            <p className="text-lightGray mb-4" ref={donations}>{donationsAmount}</p>
+            <p className="text-lightGray mb-4" ref={donations}>{totalDonations}</p>
         </>
     );
 }
