@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { toast } from "sonner";
-import { updateRecentDonations, updateFundraiserInfo } from "../stateVariables.js";
+import { updateFundraiserInfo, updateRecentDonations } from "../stateVariables.js";
 
 const countUpOptions = {
     raised: { duration: 3, prefix: '$' },
@@ -12,7 +12,7 @@ export default function CountUpComponent() {
     const raised = useRef(null);
     const progressPerc = useRef(null);
     const donations = useRef(null);
-    const [newestTimestamp, setNewestTimestamp] = useState(0);
+    const [newestTimestamp, setNewestTimestamp] = useState(new Date());
     const [totalRaised, setTotalRaised] = useState(0);
     const [goalAmount, setGoalAmount] = useState(0);
     const [totalDonations, setTotalDonations] = useState(0);
@@ -40,21 +40,18 @@ export default function CountUpComponent() {
 
             updateFundraiserInfo(data.title, data.description);
 
-            // If there are no new donations, don't update the UI
-            if (new Date(recent_donations[0].timestamp) === newestTimestamp) {
-                return;
-            }
-
             // Send notifications for each new donation
-            recent_donations.forEach((donation) => {
-                donation.timestamp = new Date(donation.timestamp);
+            if (new Date(recent_donations[0].timestamp) > newestTimestamp) {
+                recent_donations.forEach((donation) => {
+                    donation.timestamp = new Date(donation.timestamp);
 
-                if (donation.timestamp > newestTimestamp) {
-                    toast.success(`New donation from ${donation.donorName}!`, {
-                        description: `Thank you for donating ${donation.amount}.`,
-                    })
-                }
-            });
+                    if (donation.timestamp > newestTimestamp) {
+                        toast.success(`New donation from ${donation.donorName}!`, {
+                            description: `Thank you for donating ${donation.amount}.`,
+                        })
+                    }
+                });
+            }
 
             // Update the newest timestamp
             setNewestTimestamp(recent_donations[0].timestamp);
